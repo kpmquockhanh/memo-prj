@@ -2,12 +2,11 @@ import { type Ref, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { Manager, Socket } from 'socket.io-client'
 import { useAuthStore } from '@/stores/auth'
-import type { DefaultEventsMap } from 'socket.io/dist/typed-events'
 export const useWebsocket = defineStore('websocket', () => {
   const authStore = useAuthStore()
   const clients = ref([])
   const sk: Ref<Socket | null> = ref(null)
-  const manager: Ref<Manager<DefaultEventsMap, DefaultEventsMap> | null> = ref(null)
+  const manager = ref<Manager>()
   const init = (roomId: string) => {
     manager.value = new Manager(import.meta.env.VITE_WS_DOMAIN, {
       // autoConnect: false

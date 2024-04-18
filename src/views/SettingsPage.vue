@@ -87,7 +87,7 @@ onMounted(async () => {
       <div v-if="!preview.previewImage" class="w-40">
         <DynamicImage
           :dummy="!user.user?.photoUrl"
-          :src="user.user?.photoUrl"
+          :src="user.user?.photoUrl || ''"
           :loading-height="40"
           alt="profile"
         />

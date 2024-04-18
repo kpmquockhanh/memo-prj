@@ -21,9 +21,8 @@ const isHideFooter = computed(() => {
 <template>
   <div class="flex flex-col justify-between container mx-auto" :class="classes">
     <HeaderComponent />
-    <router-view v-slot="{ Component, route }">
+    <router-view v-slot="{ Component }">
       <div
-        :key="route.name"
         class="wrapper flex-grow flex px-2"
       >
         <Component :is="Component"/>

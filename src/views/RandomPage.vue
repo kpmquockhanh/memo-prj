@@ -9,7 +9,7 @@ const questions = ref('')
 const names = ref('')
 const mode = ref('questions_names')
 const type = ref('one')
-const myModal:Ref<HTMLElement | null> = ref(null)
+const myModal = ref<any>()
 const closeAndRemoveBtn: Ref<HTMLButtonElement | null> = ref(null)
 
 const randomName = ref('')
