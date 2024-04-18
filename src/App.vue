@@ -23,7 +23,7 @@ const isHideFooter = computed(() => {
     <HeaderComponent />
     <router-view v-slot="{ Component }">
       <div
-        class="wrapper flex-grow flex px-2"
+        class="wrapper flex-grow flex px-2 pb-2"
       >
         <Component :is="Component"/>
       </div>
