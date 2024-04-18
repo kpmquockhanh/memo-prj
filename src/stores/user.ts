@@ -15,8 +15,10 @@ export const useUser = defineStore('user', () => {
     console.log(resp)
   }
 
-  const fetchUser = async () => {
-   const resp = await http.request('/user', 'GET', {})
+  const fetchUser = async (opts?: {
+    ignoreAuth?: boolean,
+  }) => {
+   const resp = await http.request('/user', 'GET', {}, opts)
     user.value = resp.user
   }
 

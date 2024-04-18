@@ -14,13 +14,17 @@ const router = useRouter()
 const email = ref('test1@example.com')
 const password = ref('password')
 const toast = useToast()
+
+const loading = ref(false)
 // Use it!
 const onLogin = async () => {
+  loading.value = true
   const result = await store.login({
     email: email.value,
     password: password.value
   } as AuthRequest)
 
+  loading.value = false
   if (result) {
     toast('Login success!');
     if (store.lastPath) {
@@ -48,16 +52,19 @@ const onLogin = async () => {
           <Icon>
             <EmailIcon />
           </Icon>
-          <input type="text" class="grow" placeholder="Email" v-model="email" @keyup.enter="onLogin" />
+          <input type="text" class="grow" placeholder="Email" v-model="email" @keyup.enter="onLogin" :disabled="loading" />
         </label>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
             <KeyIcon />
           </Icon>
-          <input type="password" class="grow" value="password" v-model="password" @keyup.enter="onLogin" />
+          <input type="password" class="grow" value="password" v-model="password" @keyup.enter="onLogin" :disabled="loading" />
         </label>
         <div class="card-actions justify-end mt-4">
-          <button class="btn btn-primary" @click="onLogin">Login</button>
+          <button class="btn btn-primary" @click="onLogin" :disabled="loading">
+            <span v-if="!loading">Login</span>
+            <span v-else class="loading loading-white"></span>
+          </button>
         </div>
       </div>
     </div>

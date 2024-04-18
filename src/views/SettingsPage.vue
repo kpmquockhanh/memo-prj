@@ -15,6 +15,7 @@ const inputFile = ref<HTMLInputElement | null>(null)
 const name = ref('')
 const language = ref('')
 const isLoading = ref(false)
+const isFetching = ref(true)
 
 const isChanged = computed(() => {
   return name.value !== user.user?.name ||
@@ -48,60 +49,73 @@ onMounted(async () => {
   await user.fetchUser()
   name.value = user.user?.name || ''
   language.value = user.user?.language || ''
+  isFetching.value = false
 })
 </script>
 
 <template>
-  <div class="flex gap-4 w-full">
-    <div class="flex gap-2 flex-col basis-2/3">
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text">Email</span>
-        </div>
-        <input :value="user.user?.email" type="text" placeholder="Email" class="input input-bordered w-full" disabled />
-      </label>
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text">Name</span>
-        </div>
-        <input v-model="name" type="text" placeholder="Name" class="input input-bordered w-full" />
-      </label>
 
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text">Language</span>
-        </div>
-        <select v-model="language" class="select select-bordered w-full">
-          <option value="en">English</option>
-          <option value="tr">France</option>
-        </select>
-      </label>
-      <div class="flex justify-end">
-        <button class="btn btn-primary" @click="onUpdate" :disabled="!isChanged || isLoading">
-          <span v-if="!isLoading">Update</span>
-          <span v-else class="loading loading-spinner"></span>
-        </button>
+  <div class="flex gap-4 w-full">
+    <template v-if="isFetching">
+      <div class="w-full flex gap-2 flex-col grow">
+        <div class="skeleton h-12 w-full"></div>
+        <div class="skeleton h-12 w-full"></div>
+        <div class="skeleton h-12 w-full"></div>
+        <div class="skeleton h-12 w-full"></div>
       </div>
-    </div>
-    <div class="flex gap-4 flex-col items-center">
-      <div v-if="!preview.previewImage" class="w-40">
-        <DynamicImage
-          :dummy="!user.user?.photoUrl"
-          :src="user.user?.photoUrl || ''"
-          :loading-height="40"
-          alt="profile"
-        />
-      </div>
-      <img v-else :src="preview.previewImage" alt="" class="rounded w-40 h-40">
-      <label class="form-control w-full max-w-xs">
-        <input
-          type="file"
-          class="file-input file-input-sm file-input-bordered w-full max-w-xs"
-          accept="image/*"
-          ref="inputFile"
-          @change="preview.onChangeFile" />
-      </label>
-    </div>
+      <div class="skeleton h-40 basis-1/3"></div>
+    </template>
+   <template v-else>
+     <div class="flex gap-2 flex-col basis-2/3">
+       <label class="form-control w-full">
+         <div class="label">
+           <span class="label-text">Email</span>
+         </div>
+         <input :value="user.user?.email" type="text" placeholder="Email" class="input input-bordered w-full" disabled />
+       </label>
+       <label class="form-control w-full">
+         <div class="label">
+           <span class="label-text">Name</span>
+         </div>
+         <input v-model="name" type="text" placeholder="Name" class="input input-bordered w-full" />
+       </label>
+
+       <label class="form-control w-full">
+         <div class="label">
+           <span class="label-text">Language</span>
+         </div>
+         <select v-model="language" class="select select-bordered w-full">
+           <option value="en">English</option>
+           <option value="tr">France</option>
+         </select>
+       </label>
+       <div class="flex justify-end">
+         <button class="btn btn-primary" @click="onUpdate" :disabled="!isChanged || isLoading">
+           <span v-if="!isLoading">Update</span>
+           <span v-else class="loading loading-spinner"></span>
+         </button>
+       </div>
+     </div>
+     <div class="flex gap-4 flex-col items-center">
+       <div v-if="!preview.previewImage" class="w-40">
+         <DynamicImage
+           :dummy="!user.user?.photoUrl"
+           :src="user.user?.photoUrl || ''"
+           :loading-height="40"
+           alt="profile"
+         />
+       </div>
+       <img v-else :src="preview.previewImage" alt="" class="rounded w-40 h-40">
+       <label class="form-control w-full max-w-xs">
+         <input
+           type="file"
+           class="file-input file-input-sm file-input-bordered w-full max-w-xs"
+           accept="image/*"
+           ref="inputFile"
+           @change="preview.onChangeFile" />
+       </label>
+     </div>
+   </template>
   </div>
 
 </template>

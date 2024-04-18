@@ -29,6 +29,7 @@ export const useRequest = defineStore('request', () => {
     },
     options?: {
       noLoading?: boolean,
+      ignoreAuth?: boolean,
     }) => {
     if (!options?.noLoading) {
       loading.value = true
@@ -71,6 +72,10 @@ export const useRequest = defineStore('request', () => {
           // toast.error('Bad request')
           return await response.json()
         case 401:
+          if (options?.ignoreAuth) {
+            return {}
+          }
+
           auth.logout()
           router.push({
             name: 'login',
