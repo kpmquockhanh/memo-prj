@@ -73,7 +73,7 @@ export const useRequest = defineStore('request', () => {
           return await response.json()
         case 401:
           if (options?.ignoreAuth) {
-            return {}
+            return { error: 'Unauthorized' }
           }
 
           auth.logout()

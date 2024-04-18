@@ -19,6 +19,9 @@ export const useUser = defineStore('user', () => {
     ignoreAuth?: boolean,
   }) => {
    const resp = await http.request('/user', 'GET', {}, opts)
+    if (resp.error) {
+      return
+    }
     user.value = resp.user
   }
 
