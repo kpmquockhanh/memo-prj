@@ -62,7 +62,7 @@ const isValid = computed(() => {
           <input type="password" class="grow" value="password" placeholder="password" v-model="password" autocomplete="off" />
         </label>
         <div class="card-actions justify-end mt-4">
-          <button :disabled="!isValid" class="btn btn-primary" @click="onSubmit">Login</button>
+          <button :disabled="!isValid" class="btn btn-primary" @click="onSubmit">Register</button>
         </div>
       </div>
     </div>
