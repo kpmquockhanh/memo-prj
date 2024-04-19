@@ -85,13 +85,15 @@ export const useAuthStore = defineStore('auth', () => {
     // else set isAuth to false
     if (localToken.value) {
       // if token is valid, set isAuth to true
+      token.value = localToken.value
       await userStore.fetchUser({
         ignoreAuth: true,
       })
 
       if (userStore.user?._id) {
         isAuth.value = true
-        token.value = localToken.value
+      } else {
+        logout()
       }
     }
   }
