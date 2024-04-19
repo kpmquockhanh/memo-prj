@@ -128,7 +128,12 @@ const onLogout = () => {
           </li>
         </ul>
       </div>
-      <a class="btn btn-ghost text-xl px-0">kpmquockhanh</a>
+      <router-link
+        :to="{name: 'home'}"
+        class="btn btn-ghost text-xl px-0"
+      >
+        kpmquockhanh
+      </router-link>
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">

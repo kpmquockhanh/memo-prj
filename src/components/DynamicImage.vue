@@ -47,7 +47,7 @@ const lazyRef = useLazyload(path, {
 })
 
 const previewOptions = props.clickable ? {
-  imageUrl: path.value,
+  imageUrl: path.value?.replace('preview/', ''),
   withDownload: false,
   animation: 'blur'
 } : {}
