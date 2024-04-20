@@ -23,10 +23,10 @@ const menu = ref([
         name: 'randomPage',
         label: 'Random'
       },
-      {
-        name: 'questionPage',
-        label: 'Questions'
-      }
+      // {
+      //   name: 'questionPage',
+      //   label: 'Questions'
+      // }
     ]
   },
 ]);
