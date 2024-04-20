@@ -9,7 +9,7 @@ export const useAttachment = defineStore('attachment', () => {
   const request = useRequest()
   const toast = useToast()
   const page = ref(1)
-  const limit = ref(10)
+  const limit = ref(5)
   const doFetch = async (options?: {
     page?: number,
     limit?: number,

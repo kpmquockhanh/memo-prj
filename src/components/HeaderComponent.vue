@@ -12,13 +12,13 @@ const menu = ref([
     label: 'Home'
   },
   {
+    name: 'chat-list',
+    label: 'Chat'
+  },
+  {
     name: 'tools',
     label: 'Tools',
     children: [
-      {
-        name: 'chat-list',
-        label: 'Chat'
-      },
       {
         name: 'randomPage',
         label: 'Random'
