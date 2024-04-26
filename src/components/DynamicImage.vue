@@ -71,5 +71,10 @@ const previewOptions = props.clickable ? {
          class="rounded"
          src="https://picsum.photos/400/300"
          :alt="alt"/>
+    <div class="absolute bottom-0 p-2 text-xs glass bg-gray-500 opacity-80 w-full text-white" v-if="description">
+      <div class="overflow-hidden text-ellipsis line-clamp-2">
+        {{ description }}
+      </div>
+    </div>
   </div>
 </template>
