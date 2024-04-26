@@ -134,9 +134,9 @@ onMounted(() => {
         </transition-group>
       </template>
       <template v-else>
-        <div class="image-container flex-col text-gray-300">
+        <div class="image-container flex-col text-gray-300 relative">
           <img :src="imageUrl" :alt="Array.isArray(imageAlt) ? imageAlt[panoramaCurrentIndex] : imageAlt" />
-          <div v-if="description">{{ description }}</div>
+          <div class="absolute bottom-0 p-2 text-xs glass bg-gray-500 opacity-95" v-if="description">{{ description }}</div>
         </div>
       </template>
 
