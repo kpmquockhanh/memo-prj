@@ -22,6 +22,10 @@ const props = defineProps({
   loadingHeight: {
     type: Number,
     default: 72
+  },
+  description: {
+    type: String,
+    default: '',
   }
 })
 const loading = ref(true)
@@ -49,13 +53,14 @@ const lazyRef = useLazyload(path, {
 const previewOptions = props.clickable ? {
   imageUrl: path.value?.replace('preview/', ''),
   withDownload: false,
-  animation: 'blur'
+  animation: 'blur',
+  description: props.description,
 } : {}
 
 </script>
 
 <template>
-  <div v-if="path" class="flex justify-center w-full">
+  <div v-if="path" class="flex justify-center w-full cursor-pointer">
     <div v-show="loading" class="skeleton w-full rounded" :class="[`h-${loadingHeight}`]"></div>
     <img
       v-if="!error"

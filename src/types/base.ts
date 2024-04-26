@@ -28,6 +28,7 @@ export type Attachment = {
   fullPath: string,
   width: number,
   height: number,
+  description: string,
 }
 
 export type User = {

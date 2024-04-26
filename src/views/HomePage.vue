@@ -19,6 +19,7 @@ const deleting = ref(false)
 const deletingItem: Ref<Attachment | null> = ref(null)
 const inputFile = ref<HTMLInputElement | null>(null)
 const isLoadingMore = ref(false)
+const description = ref('')
 const auth = useAuthStore()
 const preview = usePreviewImage()
 
@@ -31,7 +32,7 @@ const onSubmit = async () => {
     return
   }
   uploading.value = true
-  await attachment.doUpload(preview.file)
+  await attachment.doUpload(preview.file, description.value)
   uploading.value = false
   onCloseModal()
   resetInput()
@@ -127,8 +128,8 @@ const initObserver = () => {
     <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg">
       <div v-for="item in attachment.items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
         <DynamicImage
-          class="cursor-pointer"
           :src="item.fullPath"
+          :description="item.description || ''"
           alt="egjs"
           :clickable="true"
         />
@@ -168,7 +169,7 @@ const initObserver = () => {
         <img v-if="preview.previewImage" :src="preview.previewImage" alt="sample" class="max-h-72 rounded object-contain">
         <input type="file" class="file-input file-input-bordered file-input-sm w-full max-w-xs" @input="preview.onChangeFile"
                accept="image/*" ref="inputFile" />
-        <input type="text" placeholder="Description (optional)" class="input input-bordered input-sm w-full max-w-xs" />
+        <input type="text" placeholder="Description (optional)" class="input input-bordered input-sm w-full max-w-xs" v-model="description" />
       </div>
       <div class="divider" />
       <div class="pt-2 pb-4 flex justify-end gap-4">

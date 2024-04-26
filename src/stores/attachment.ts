@@ -33,10 +33,13 @@ export const useAttachment = defineStore('attachment', () => {
     await doFetch({ page: page.value })
   }
 
-  const doUpload = async (file: File) => {
+  const doUpload = async (file: File, description?: string) => {
     const formData = new FormData()
     formData.append('image', file)
     formData.append('name', file.name)
+    if (description) {
+      formData.append('description', description)
+    }
     const resp = await request.request('/v1/attachments', 'POST', {
       body: formData
     })
