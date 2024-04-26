@@ -8,7 +8,7 @@ import Toast from "vue-toastification";
 import '@assets/app.scss'
 import "vue-toastification/dist/index.css";
 import VueLazyLoad from 'vue3-lazyload';
-import { fullscreenImagePlugin } from '@plugins/fullscreen-image-plugin/index.ts';
+import { fullscreenImagePlugin } from '@plugins/fullscreen-image-plugin';
 import '@plugins/fullscreen-image-plugin/assets/style.css';
 
 const app = createApp(App)
