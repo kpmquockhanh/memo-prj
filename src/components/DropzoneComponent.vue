@@ -10,6 +10,7 @@ const uploading = ref(false)
 const attachment = useAttachment()
 const loadingFile = ref<{[key: string]: boolean}>({})
 const doneFile = ref<{[key: string]: boolean}>({})
+const descriptions = ref<{[key: number]: string}>({})
 
 const { getRootProps, getInputProps, isDragActive } = useDropzone({
   onDrop,
@@ -39,18 +40,21 @@ const formatBytes = (bytes: number) => {
 
 const onSubmit = async () => {
   uploading.value = true
-  for (const f of files.value) {
+  for (const i in files.value) {
+    const f = files.value[i]
     loadingFile.value[`${f.name}_${f.size}`] = true
-    attachment.doUpload(f).then(() => {
+    attachment.doUpload(f, descriptions.value[i]).then(() => {
       loadingFile.value[`${f.name}_${f.size}`] = false
       doneFile.value[`${f.name}_${f.size}`] = true
 
       if (Object.keys(doneFile.value).length === files.value.length) {
+
         setTimeout(() => {
           uploading.value = false
           files.value = []
           filePreview.value = []
           doneFile.value = {}
+          descriptions.value = {}
         }, 2000)
       }
     })
@@ -81,21 +85,26 @@ const onSubmit = async () => {
       <transition>
         <div v-if="files.length" class="mt-6">
           <div class="flex flex-wrap gap-2 justify-center mb-4">
-            <div class="flex gap-2 relative border rounded w-40 h-40" v-for="(file, index) in files" :key="index">
-              <img :src="filePreview[index]" alt="" class="rounded w-full object-cover" />
-              <div class="absolute top-1.5 right-1.5">
-                <button class="btn btn-xs btn-square btn-outline text-xs" @click="handleClickDeleteFile(index)">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-              </div>
-              <span class="overflow-ellipsis overflow-hidden absolute left-0 bottom-0 w-full text-xs glass rounded-b">{{ file.name }}</span>
-              <div class="badge badge-accent absolute left-2 top-2 text-xs">
-                {{ formatBytes(file.size) }}
-              </div>
+            <div class="gap-2 w-40" v-for="(file, index) in files" :key="index">
+              <div class="relative border rounded">
+                <img :src="filePreview[index]" alt="" class="rounded object-cover" />
+                <div class="absolute top-1.5 right-1.5">
+                  <button class="btn btn-xs btn-square btn-outline text-xs" @click="handleClickDeleteFile(index)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+                <span class="overflow-ellipsis overflow-hidden absolute left-0 bottom-0 w-full text-xs glass rounded-b text-gray-200 p-1">{{ file.name }}</span>
+                <div class="badge badge-accent absolute left-2 top-2 text-xs">
+                  {{ formatBytes(file.size) }}
+                </div>
 
-              <div v-if="loadingFile[`${file.name}_${file.size}`] || doneFile[`${file.name}_${file.size}`]" class="absolute text-green-400 w-full h-full flex justify-center items-center">
-                <span v-if="loadingFile[`${file.name}_${file.size}`]" class="loading loading-ring loading-lg"></span>
-                <Checkmark16Filled v-if="doneFile[`${file.name}_${file.size}`]" class="w-10 h-10" />
+                <div v-if="loadingFile[`${file.name}_${file.size}`] || doneFile[`${file.name}_${file.size}`]" class="absolute top-0 left-0 text-green-400 w-full h-full flex justify-center items-center">
+                  <span v-if="loadingFile[`${file.name}_${file.size}`]" class="loading loading-ring loading-lg"></span>
+                  <Checkmark16Filled v-if="doneFile[`${file.name}_${file.size}`]" class="w-10 h-10" />
+                </div>
+              </div>
+              <div>
+                <textarea type="text" class="input input-bordered input-xs w-full mt-1" placeholder="Description" v-model="descriptions[index]" />
               </div>
             </div>
           </div>
