@@ -26,6 +26,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/chat/edit/:room_id',
+      name: 'chat:edit',
+      component: () => import('../views/EditRoomPage.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/random',
       name: 'randomPage',
       component: () => import('../views/RandomPage.vue')
@@ -77,11 +85,9 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (to.name === 'login') {
-    if (isAuth) {
-      next({ name: 'home' })
-      isBlock = true
-    }
+  if (to.name === 'login' && isAuth) {
+    next({ name: 'home' })
+    isBlock = true
   }
 
   if (!isBlock) {

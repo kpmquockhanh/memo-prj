@@ -33,7 +33,6 @@ const onUpdate = async () => {
   }
   isLoading.value = true
   const resp = await user.updateUser(userReq)
-  console.log(resp)
   if (resp.resultCode !== '00086') {
     isLoading.value = false
     toast.error(resp.data?.en)

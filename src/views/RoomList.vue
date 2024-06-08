@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import SettingIcon from '@vicons/fluent/Settings32Regular'
+import { Icon } from '@vicons/utils'
 import { useRoom } from '@/stores/room'
 
 const room = useRoom()
@@ -10,6 +12,10 @@ const description = ref('')
 
 const onJoinRoom = (roomId: string) => {
   room.joinRoom(roomId)
+}
+
+const onEditRoom = (roomId: string) => {
+  room.editRoom(roomId)
 }
 
 const onShowModal = () => {
@@ -75,15 +81,21 @@ onMounted(async () => {
       <div v-else v-for="r in rooms" :key="r._id">
         <div class="card glass">
           <figure class="relative">
-            <img src="https://dummyimage.com/400x300" alt="car!" class="w-full" />
+            <img v-if="r.thumbnail" :src="r.thumbnail" alt="">
+            <img v-else src="https://dummyimage.com/400x300" alt="" class="w-full" />
             <button class="btn btn-circle btn-xs absolute right-1 top-1" @click="onRemove(r._id)">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </figure>
           <div class="card-body">
-            <h2 class="card-title">{{ r.name }}</h2>
-            <p>{{ r.description }}</p>
+            <h2 class="card-title whitespace-nowrap overflow-hidden text-ellipsis">{{ r.name }}</h2>
+            <p class="whitespace-nowrap overflow-hidden text-ellipsis">{{ r.description }}</p>
             <div class="card-actions justify-end">
+              <button class="btn btn-ghost" @click="onEditRoom(r._id)">
+                <Icon>
+                  <SettingIcon />
+                </Icon>
+              </button>
               <button class="btn btn-primary" @click="onJoinRoom(r._id)">Join!</button>
             </div>
           </div>

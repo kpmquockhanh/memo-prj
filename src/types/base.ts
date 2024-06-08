@@ -67,6 +67,7 @@ export type Room = {
   _id: string,
   name: string,
   description: string,
+  thumbnail: string,
   createdBy: User,
   createdAt: string,
   updatedAt: string,

@@ -6,7 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 export const initApp = async () => {
   const authStore = useAuthStore()
 
-  authStore.initAuth().then()
+  await authStore.initAuth()
 
   dayjs.extend(duration);
   dayjs.extend(relativeTime);

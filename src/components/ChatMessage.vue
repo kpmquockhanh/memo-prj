@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
-import { useUser } from '@/stores/user'
 import DynamicImage from '@components/DynamicImage.vue'
 
 const props = defineProps({

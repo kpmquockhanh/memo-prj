@@ -17,13 +17,13 @@ app.use(Toast, {
   position: "bottom-right",
 });
 app.use(createPinia())
-app.use(router)
-app.use(VueLazyLoad, {
-  // options...
-})
-app.use(fullscreenImagePlugin)
 
 initApp().then(() => {
+  app.use(router)
+  app.use(VueLazyLoad, {
+    // options...
+  })
+  app.use(fullscreenImagePlugin)
   app.mount('#app')
 })
 
