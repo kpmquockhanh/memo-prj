@@ -4,7 +4,6 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoom } from '@/stores/room'
 import DynamicImage from '@components/DynamicImage.vue'
 import { usePreviewImage } from '@/stores/previewImage'
-import { useUser } from '@/stores/user'
 
 const room = useRoom()
 

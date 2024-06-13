@@ -21,8 +21,12 @@ const menu = ref([
     children: [
       {
         name: 'randomPage',
-        label: 'Random'
+        label: 'Random',
       },
+      {
+        name: 'ai_number',
+        label: 'Number prediction'
+      }
       // {
       //   name: 'questionPage',
       //   label: 'Questions'

@@ -59,6 +59,11 @@ const router = createRouter({
       component: () => import('../views/SettingsPage.vue')
     },
     {
+      path: '/ai-number',
+      name: 'ai_number',
+      component: () => import('../views/NumberPredictionPage.vue')
+    },
+    {
       path: '/test',
       name: 'test',
       component: () => import('../views/TestPage.vue')
