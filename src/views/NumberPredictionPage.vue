@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRequest } from '@/stores/http'
 
 const drawing = ref(false)
-const prediction = ref(null)
+const prediction = ref<{result?: { digit?: number}}>()
 const request = useRequest()
 const canvas = ref<HTMLCanvasElement>()
 
@@ -33,8 +33,12 @@ const stopDrawing = () => {
 }
 
 const  dataURLToBlob = (dataURL: string) => {
-  var parts = dataURL.split(','), mime = parts[0]?.match(/:(.*?);/)[1],
-    bstr = atob(parts[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  const parts = dataURL.split(',');
+  if (parts.length !== 2) return new Blob();
+  const match = parts[0].match(/:(.*?);/);
+  if (!match || match.length < 2) return new Blob();
+  let mime = match[1];
+  let bstr = atob(parts[1]), n = bstr.length, u8arr = new Uint8Array(n);
   while (n--) {
     u8arr[n] = bstr.charCodeAt(n);
   }
@@ -46,7 +50,7 @@ const predictDigit = async () => {
 
   const dataURL = canvas.value.toDataURL('image/png');
   const blob = dataURLToBlob(dataURL);
-  const formData = new FormData()
+  const formData = new FormData();
   formData.append('image', blob, 'digit.png')
 
   const resp = await request.request('/v1/ai', 'POST', {
@@ -60,7 +64,7 @@ const clearCanvas = () => {
   const ctx = canvas.value.getContext('2d')
   if (!ctx) return
   ctx.clearRect(0, 0, canvas.value.width, canvas.value.height)
-  prediction.value = null
+  prediction.value = undefined
 }
 </script>
 
