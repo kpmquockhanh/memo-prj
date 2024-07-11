@@ -25,7 +25,9 @@ const preview = usePreviewImage()
 
 onMounted(async () => {
   await attachment.doFetch()
-  initObserver()
+
+  // Using infinity scroll
+  // initObserver()
 })
 const onSubmit = async () => {
   if (!preview.file) {
@@ -87,13 +89,16 @@ const onClickRemove = (item: Attachment) => {
 const loadMoreRef = ref<HTMLElement | null>(null)
 
 const onLoadMore = async () => {
+  console.log('on load more')
   if (isLoadingMore.value) {
     return
   }
   isLoadingMore.value = true
   await attachment.nextPage()
   isLoadingMore.value = false
-  initObserver()
+
+  // Using infinity scroll
+  // initObserver()
 }
 
 const initObserver = () => {
@@ -140,9 +145,9 @@ const initObserver = () => {
 
     </div>
     <div class="flex justify-center mb-2 mt-2">
-      <button v-if="!attachment.isLastPage" class="btn btn-sm btn-outline" ref="loadMoreRef">
-        <span>Load more</span>
+      <button v-if="!attachment.isLastPage" class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
         <span v-if="isLoadingMore" class="loading loading-dots loading-xs"></span>
+        <span v-else>Load more</span>
       </button>
     </div>
     <button v-if="auth.isAdmin" class="btn btn-circle btn-outline fixed right-1.5 bottom-1.5" @click="onShow">

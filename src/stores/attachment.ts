@@ -10,6 +10,8 @@ export const useAttachment = defineStore('attachment', () => {
   const toast = useToast()
   const page = ref(1)
   const limit = ref(5)
+
+  const total = ref(0)
   const doFetch = async (options?: {
     page?: number,
     limit?: number,
@@ -22,10 +24,11 @@ export const useAttachment = defineStore('attachment', () => {
     } else {
       items.value = [...items.value, ...(resp.attachments || [])]
     }
+    total.value = resp.total
   }
 
   const isLastPage = computed(() => {
-    return items.value.length < page.value * limit.value
+    return items.value.length === total.value
   })
 
   const nextPage = async () => {
