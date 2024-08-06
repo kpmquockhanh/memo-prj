@@ -7,7 +7,7 @@ import { useAttachment } from '@/stores/attachment'
 const files = ref<Array<File>>([])
 const filePreview = ref<string[]>([])
 const uploading = ref(false)
-const attachment = useAttachment()
+const { doUpload } = useAttachment()
 const loadingFile = ref<{[key: string]: boolean}>({})
 const doneFile = ref<{[key: string]: boolean}>({})
 const descriptions = ref<{[key: number]: string}>({})
@@ -43,12 +43,13 @@ const onSubmit = async () => {
   for (const i in files.value) {
     const f = files.value[i]
     loadingFile.value[`${f.name}_${f.size}`] = true
-    attachment.doUpload(f, descriptions.value[i]).then(() => {
+    doUpload(f, descriptions.value[i]).then((resp) => {
       loadingFile.value[`${f.name}_${f.size}`] = false
-      doneFile.value[`${f.name}_${f.size}`] = true
+      if (resp) {
+        doneFile.value[`${f.name}_${f.size}`] = true
+      }
 
       if (Object.keys(doneFile.value).length === files.value.length) {
-
         setTimeout(() => {
           uploading.value = false
           files.value = []
@@ -57,6 +58,8 @@ const onSubmit = async () => {
           descriptions.value = {}
         }, 2000)
       }
+    }).catch(() => {
+      console.log('On error uploading')
     })
   }
 }
@@ -65,9 +68,9 @@ const onSubmit = async () => {
 
 <template>
   <div class="flex items-center justify-center w-full">
-    <div class="w-full p-9 bg-white rounded-lg shadow-lg">
+    <div class="w-full">
       <div
-        class="cursor-pointer bg-gray-100 p-8 text-center rounded-lg border-dashed border-2 border-gray-300 hover:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-md"
+        class="cursor-pointer bg-gray-100 p-4 text-center rounded-lg border-dashed border-2 border-gray-300 hover:border-blue-500 transition duration-300 ease-in-out transform hover:scale-105"
         :class="{
         'border-blue-500 scale-105 shadow-md': isDragActive,
         }"
@@ -113,8 +116,6 @@ const onSubmit = async () => {
           </div>
         </div>
       </transition>
-
-
     </div>
   </div>
 </template>

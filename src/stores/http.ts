@@ -87,14 +87,22 @@ export const useRequest = defineStore('request', () => {
           break
         case 404:
           toast.error('Not found')
-          return await response.json()
-          break
+          return {
+            ...await response.json(),
+            error: 'Not found',
+          }
         case 500:
           toast.error('Server error')
-          break
+          return {
+            ...await response.json(),
+            error: 'Server error',
+          }
         default:
           toast.error('Unknown status')
-          break
+          return {
+            ...await response.json(),
+            error: 'Unknown status',
+          }
       }
       return {}
     } catch (e) {

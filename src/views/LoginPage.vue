@@ -11,8 +11,8 @@ import { useToast } from 'vue-toastification'
 const store = useAuthStore()
 const router = useRouter()
 
-const email = ref('test1@example.com')
-const password = ref('password')
+const email = ref('')
+const password = ref('')
 const toast = useToast()
 
 const loading = ref(false)

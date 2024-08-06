@@ -85,6 +85,10 @@ const onLogout = () => {
   })
 }
 
+const appName = computed(() => {
+  return import.meta.env.VITE_APP_NAME
+})
+
 </script>
 
 <template>
@@ -134,9 +138,9 @@ const onLogout = () => {
       </div>
       <router-link
         :to="{name: 'home'}"
-        class="btn btn-ghost text-xl px-0"
+        class="btn btn-ghost text-xl px-2"
       >
-        kpmquockhanh
+        {{ appName }}
       </router-link>
     </div>
     <div class="navbar-center hidden lg:flex">

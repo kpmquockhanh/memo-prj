@@ -12,13 +12,12 @@ import { fullscreenImagePlugin } from '@plugins/fullscreen-image-plugin';
 import '@plugins/fullscreen-image-plugin/assets/style.css';
 
 const app = createApp(App)
-
-app.use(Toast, {
-  position: "bottom-right",
-});
 app.use(createPinia())
 
 initApp().then(() => {
+  app.use(Toast, {
+    position: "bottom-right",
+  });
   app.use(router)
   app.use(VueLazyLoad, {
     // options...

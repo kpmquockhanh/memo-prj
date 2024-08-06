@@ -1,0 +1,92 @@
+.dynamic-image {
+  & + button.btn-circle {
+    transition: all .3s ease-out;
+  }
+  img {
+    transition: .5s;
+  }
+  .crd-heading {
+    color: hsl(0, 0%, 90%);
+    position: absolute;
+    bottom: 4px;
+    transition:all .5s ease-out;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    opacity: .9;
+    filter: blur(3px);
+    .ct {
+      padding: 8px;
+      background: rgba(0, 0, 0, .5);
+      border-radius: 16px;
+    }
+  }
+  &:hover {
+    .crd-heading {
+      opacity: 1;
+      transform: scale(.95);
+      filter: none;
+      bottom: 16px;
+      .ct {
+        backdrop-filter: blur(2px);
+        line-clamp: none;
+        -webkit-line-clamp: unset;
+        text-overflow: unset;
+      }
+    }
+    & + button.btn-circle {
+      top: 12px;
+      right: 12px;
+      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,.3);
+    }
+    img {
+      transform: scale(.95);
+    }
+  }
+}
+
+.crd {
+  .crd-heading {
+    position: relative;
+    color: hsla(0, 0%, 90%, .5);
+  }
+  .crd-heading span {
+    color: hsl(0, 0%, 90%);
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    transform: scale(1.4);
+    transition: .5s;
+  }
+
+  .crd-info {
+    text-align: right;
+    right: 30px;
+    left: unset;
+  }
+
+  .crd-text {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+
+  .crd-img {
+    transition: .5s;
+  }
+
+  &:hover {
+    .crd-heading span {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &:hover, & {
+    .crd-img {
+      transform: scale(.9);
+    }
+  }
+}

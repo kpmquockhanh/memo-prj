@@ -9,21 +9,28 @@ export const useAttachment = defineStore('attachment', () => {
   const request = useRequest()
   const toast = useToast()
   const page = ref(1)
-  const limit = ref(5)
+  const limit = ref(10)
+
+  const isLoading = ref(false)
 
   const total = ref(0)
   const doFetch = async (options?: {
     page?: number,
     limit?: number,
+    ignoreLoad?: boolean
   }) => {
+    if (!options?.ignoreLoad) {
+      isLoading.value = true
+    }
     const resp = await request.request('/v1/attachments', 'GET', {
-      params: { limit: limit.value, ...options }
+      params: { limit: limit.value, page: options?.page || page.value }
     })
     if (!options?.page || options?.page === 1) {
       items.value = resp.attachments || []
     } else {
       items.value = [...items.value, ...(resp.attachments || [])]
     }
+    isLoading.value = false
     total.value = resp.total
   }
 
@@ -33,7 +40,7 @@ export const useAttachment = defineStore('attachment', () => {
 
   const nextPage = async () => {
     page.value += 1
-    await doFetch({ page: page.value })
+    await doFetch({ page: page.value, ignoreLoad: true })
   }
 
   const doUpload = async (file: File, description?: string) => {
@@ -46,14 +53,14 @@ export const useAttachment = defineStore('attachment', () => {
     const resp = await request.request('/v1/attachments', 'POST', {
       body: formData
     })
-    console.log('done upload', file.name)
     if (resp.error) {
-      toast.error('Upload failed')
-      return
+      toast.error(resp.message || 'Upload failed')
+      return false
     }
     if (resp.attachment) {
       items.value = [...[resp.attachment], ...items.value]
     }
+    return true
   }
 
   const doRemove = async (id: string) => {
@@ -68,5 +75,5 @@ export const useAttachment = defineStore('attachment', () => {
   const getSrc = (attachment: Attachment) => {
     return `${import.meta.env.VITE_API_DOMAIN}${attachment.src}`
   }
-  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage }
+  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading }
 })
