@@ -44,6 +44,7 @@ export type User = {
   deviceId: string,
   gender: string,
   photoUrl: string,
+  username: string,
 }
 
 export type UpdateUser = {
@@ -69,6 +70,14 @@ export type Room = {
   description: string,
   thumbnail: string,
   createdBy: User,
+  createdAt: string,
+  updatedAt: string,
+}
+
+export type Invitation = {
+  _id: string,
+  photoUrl: string,
+  origin: User,
   createdAt: string,
   updatedAt: string,
 }

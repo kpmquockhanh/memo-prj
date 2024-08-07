@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useFriendStore } from '@/stores/friend'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,11 @@ const router = createRouter({
       component: () => import('../views/SettingsPage.vue')
     },
     {
+      path: '/friends',
+      name: 'friends',
+      component: () => import('../views/FindFriendPage.vue')
+    },
+    {
       path: '/ai-number',
       name: 'ai_number',
       component: () => import('../views/NumberPredictionPage.vue')
@@ -81,6 +87,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const { isAuth, setLastPath } = useAuthStore()
+  const { fetchInvitations } = useFriendStore()
   let isBlock = false
   if (to.meta.requiresAuth) {
     if (!isAuth) {
@@ -96,6 +103,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (!isBlock) {
+    fetchInvitations().then()
     next()
   }
 })

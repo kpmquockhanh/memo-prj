@@ -30,7 +30,11 @@ const props = defineProps({
   },
   description: {
     type: String,
-    default: '',
+    default: ''
+  },
+  circle: {
+    type: Boolean,
+    default: false
   }
 })
 const loading = ref(true)
@@ -60,26 +64,38 @@ const previewOptions = props.clickable ? {
   imageUrl: path.value?.replace('preview/', ''),
   withDownload: false,
   animation: 'blur',
-  description: props.description,
+  description: props.description
 } : {}
+
+const roundedClass = computed(() => {
+  return props.circle ? 'rounded-full aspect-square w-full' : 'rounded-md'
+})
 
 </script>
 
 <template>
-  <div v-if="path" class="flex justify-center w-full cursor-pointer dynamic-image">
-    <div v-show="loading" class="skeleton rounded-md" :style="{
+  <div v-if="path" class="flex justify-center w-full dynamic-image" :class="{'h-full': props.circle}">
+    <div class="w-full overflow-hidden flex justify-center" v-if="loading">
+      <div class="skeleton rounded-md" :style="{
       height: `${loadingHeight}px`,
       width: `${loadingWidth}px`
     }"></div>
+    </div>
     <img
-      v-if="!error"
+      v-if="!error && props.clickable"
       ref="lazyRef"
-      class="rounded-md"
+      :class="roundedClass"
       v-fullscreen-image="previewOptions"
       :alt="description"
     >
+    <img
+      v-else-if="!error"
+      ref="lazyRef"
+      :class="roundedClass"
+      :alt="description"
+    >
     <img v-else
-         class="rounded-md"
+         :class="roundedClass"
          :src="noImage"
          :alt="alt"
     />

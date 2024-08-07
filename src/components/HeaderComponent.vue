@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, type Ref, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
+import { computed, type Ref, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
+import Alert24Filled from '@vicons/fluent/Alert24Filled'
 import { useUser } from '@/stores/user'
 import DynamicImage from '@components/DynamicImage.vue'
+import { Icon } from '@vicons/utils'
+import NotificationComponent from '@components/NotificationComponent.vue'
 
 const menu = ref([
   {
@@ -47,6 +50,11 @@ const accountMenu = computed(() => [
     show: !authState.isAuth
   },
   {
+    name: 'friends',
+    label: 'Find friends',
+    show: authState.isAuth
+  },
+  {
     name: 'settings',
     label: 'Settings',
     show: authState.isAuth
@@ -65,10 +73,6 @@ const authState = useAuthStore();
 const user = useUser();
 
 const isOpen: Ref<Map<string, boolean>> = ref(new Map());
-
-onMounted(() => {
-  // user.fetchUser().then();
-})
 
 watch(route, () => {
   isOpen.value = new Map();
@@ -98,7 +102,7 @@ const appName = computed(() => {
         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
         </div>
-        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        <ul tabindex="0" class="menu menu-md dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
           <li
             v-for="item in menu"
             :key="item.name"
@@ -181,19 +185,36 @@ const appName = computed(() => {
         </li>
       </ul>
     </div>
-    <div class="navbar-end">
+    <div class="navbar-end gap-4">
+      <div :class="['dropdown dropdown-end dropdown-hover']">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar online">
+          <div class="w-10">
+            <div class="flex justify-center items-center h-full">
+              <Icon size="24">
+                <Alert24Filled/>
+              </Icon>
+            </div>
+          </div>
+        </div>
+        <div tabindex="0" class="z-[1] shadow dropdown-content bg-base-100 rounded-box w-72 p-4">
+          <NotificationComponent />
+        </div>
+      </div>
+
       <div :class="['dropdown dropdown-end dropdown-hover']">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-          <div class="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-1 flex items-center justify-center">
+          <div class="w-10 rounded-full ring ring-gray-600 ring-offset-base-100 ring-offset-1 flex items-center justify-center">
             <UserIcon v-if="!user.user?.photoUrl"/>
             <DynamicImage
               v-else
               :src="user.user?.photoUrl"
               alt="profile"
+              :loading-height="40"
+              :loading-width="40"
             />
           </div>
         </div>
-        <ul tabindex="0" class="z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+        <ul tabindex="0" class="z-[1] p-2 shadow menu menu-md dropdown-content bg-base-100 rounded-box w-52">
           <li v-for="menu in accountMenu.filter((m) => m.show)" :key="menu.name" class="mb-1 last:mb-0">
             <router-link
               v-if="!menu.action"

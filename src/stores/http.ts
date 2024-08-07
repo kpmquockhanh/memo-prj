@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
+import get from 'lodash/get'
 
 export const useRequest = defineStore('request', () => {
   const auth = useAuthStore()
@@ -98,11 +99,14 @@ export const useRequest = defineStore('request', () => {
             error: 'Server error',
           }
         default:
-          toast.error('Unknown status')
+        {
+          const resp = await response.json()
+          toast.error(get(resp, 'message', 'Unknown status'))
           return {
-            ...await response.json(),
+            ...resp,
             error: 'Unknown status',
           }
+        }
       }
       return {}
     } catch (e) {

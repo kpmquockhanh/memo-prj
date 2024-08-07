@@ -1,4 +1,4 @@
-.dynamic-image {
+.dynamic-image.crd {
   & + button.btn-circle {
     transition: all .3s ease-out;
   }
@@ -13,7 +13,6 @@
     overflow: hidden;
     display: flex;
     align-items: center;
-
     opacity: .9;
     filter: blur(3px);
     .ct {
@@ -44,49 +43,13 @@
     img {
       transform: scale(.95);
     }
+    & + .avatar-image {
+      top: calc(5%);
+      left: 5%;
+    }
   }
 }
 
-.crd {
-  .crd-heading {
-    position: relative;
-    color: hsla(0, 0%, 90%, .5);
-  }
-  .crd-heading span {
-    color: hsl(0, 0%, 90%);
-    position: absolute;
-    right: 0;
-    top: 0;
-    opacity: 0;
-    transform: scale(1.4);
-    transition: .5s;
-  }
-
-  .crd-info {
-    text-align: right;
-    right: 30px;
-    left: unset;
-  }
-
-  .crd-text {
-    padding-left: 0;
-    padding-right: 1rem;
-  }
-
-  .crd-img {
-    transition: .5s;
-  }
-
-  &:hover {
-    .crd-heading span {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  &:hover, & {
-    .crd-img {
-      transform: scale(.9);
-    }
-  }
+.avatar-image {
+  transition:all .5s ease-out
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref, type Ref, computed } from 'vue'
 import Add from '@vicons/fluent/Add16Filled'
 import Camera from '@vicons/fluent/Camera20Filled'
 import { Icon } from '@vicons/utils'
@@ -13,6 +13,8 @@ import WelcomeApp from '@/views/WelcomeApp.vue'
 import { storeToRefs } from 'pinia'
 import BaseModal from '@/views/BaseModal.vue'
 import CameraComponent from '@/views/CameraComponent.vue'
+import FriendsComponent from '@/views/FriendsComponent.vue'
+import UserIcon from '@vicons/ionicons5/PersonSharp'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore);
@@ -25,6 +27,7 @@ const isShowModal = ref(false)
 const isShowDeleteModal = ref(false)
 const isShowCamera = ref(false)
 const dropzoneRef = ref<HTMLElement | null>(null)
+const masonryRef = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
   await doFetch()
@@ -60,40 +63,71 @@ const onLoadMore = async () => {
   isLoadingMore.value = false
 }
 
-const onSubmit = () => {
-  console.log('dropzoneref', dropzoneRef.value)
-  if (dropzoneRef.value) {
-    dropzoneRef.value.click()
+const columnWidths = computed(() => {
+  const container = masonryRef.value
+  if (!container) {
+    return 0;
   }
-}
+  const computedStyle = window.getComputedStyle(container);
+  const columnGap = parseInt(computedStyle.columnGap) || 0;
+  const containerWidth = container.offsetWidth;
+  const columnCount = parseInt(computedStyle.columnCount);
+
+  // Calculate the width of a single column
+  return (containerWidth - (columnGap * (columnCount - 1))) / columnCount;
+})
+
+const ratio = computed(() => {
+  if (!columnWidths.value) {
+    return 0
+  }
+  return columnWidths.value / 300
+})
+
+// Usage
+
 </script>
 <template>
   <div class="w-full">
-    <div class="flex justify-center mb-2">
+    <div v-if="false" class="flex justify-center mb-2">
       <CountdownComponent/>
     </div>
+
+    <div v-if="true" class="flex justify-center mb-2">
+      <FriendsComponent/>
+    </div>
     <WelcomeApp v-if="!items.length && !isLoading" @start="onShow"/>
-    <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg">
-      <div v-for="item in items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
-        <DynamicImage
-          :src="item.fullPath"
-          :description="item.description || ''"
-          alt="egjs"
-          :clickable="true"
-          :loading-height="item.height"
-          :loading-width="item.width"
-        />
-        <button v-if="auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
-          ✕
-        </button>
-      </div>
-    </div>
-    <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
-      <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
-        <span v-if="isLoadingMore" class="loading loading-dots loading-xs"></span>
-        <span v-else>Load more</span>
-      </button>
-    </div>
+   <template v-if="items.length">
+     <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
+       <div v-for="item in items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
+         <DynamicImage
+           class="crd"
+           :src="item.fullPath"
+           :description="item.description || ''"
+           alt="egjs"
+           :clickable="true"
+           :loading-height="item.height * ratio"
+           :loading-width="item.width * ratio"
+         />
+
+         <div class="absolute top-1 left-1 w-5 h-5 avatar-image">
+           <DynamicImage circle :src="item.createdBy?.photoUrl" v-if="item.createdBy?.photoUrl" />
+           <Icon v-else size="20">
+             <UserIcon/>
+           </Icon>
+         </div>
+         <button v-if="auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
+           ✕
+         </button>
+       </div>
+     </div>
+     <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
+       <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
+         <span v-if="isLoadingMore" class="loading loading-dots loading-xs"></span>
+         <span v-else>Load more</span>
+       </button>
+     </div>
+   </template>
 
     <ul class="menu bg-base-200 rounded-box fixed right-1.5 bottom-1.5">
       <li>
@@ -112,20 +146,23 @@ const onSubmit = () => {
           </svg>
         </a>
       </li>
-      <li v-if="auth.isAdmin">
-        <a class="tooltip tooltip-left flex" data-tip="Upload" @click.prevent="onShow">
-          <Icon size="20">
-            <Add />
-          </Icon>
-        </a>
-      </li>
-      <li v-if="auth.isAdmin">
-        <a class="tooltip tooltip-left flex" data-tip="Camera" @click.prevent="isShowCamera = true">
-          <Icon size="20">
-            <Camera />
-          </Icon>
-        </a>
-      </li>
+      <template v-if="auth.isAuth">
+        <li>
+          <a class="tooltip tooltip-left flex" data-tip="Upload" @click.prevent="onShow">
+            <Icon size="20">
+              <Add />
+            </Icon>
+          </a>
+        </li>
+        <li v-if="auth.isAdmin">
+          <a class="tooltip tooltip-left flex" data-tip="Camera" @click.prevent="isShowCamera = true">
+            <Icon size="20">
+              <Camera />
+            </Icon>
+          </a>
+        </li>
+      </template>
+
     </ul>
   </div>
   <BaseModal :show="isShowModal" @close="isShowModal = false" title="Upload">
@@ -144,6 +181,8 @@ const onSubmit = () => {
       class="flex justify-center py-4 w-full"
       :src="deletingItem.fullPath"
       :dummy="false"
+      :loading-height="deletingItem.height"
+      :loading-width="deletingItem.width"
       alt="egjs" />
   </BaseModal>
 </template>
