@@ -105,9 +105,11 @@ const ratio = computed(() => {
     <WelcomeApp v-if="!items.length && !isLoading" @start="onShow"/>
    <template v-if="items.length">
      <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
-
        <transition-group name="list">
-         <div v-for="item in items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
+         <div
+           v-for="item in items"
+           :key="item._id"
+           class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
            <DynamicImage
              class="crd"
              :src="item.fullPath"

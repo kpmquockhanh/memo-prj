@@ -68,7 +68,7 @@ const previewOptions = props.clickable ? {
 } : {}
 
 const roundedClass = computed(() => {
-  return props.circle ? 'rounded-full aspect-square w-full' : 'rounded-md'
+  return props.circle ? 'rounded-full aspect-square w-full' : 'rounded-md w-full'
 })
 
 </script>
@@ -99,7 +99,7 @@ const roundedClass = computed(() => {
          :src="noImage"
          :alt="alt"
     />
-    <div class="absolute bottom-0 p-2 text-xs w-full text-white rounded-b-md crd-heading" v-if="description">
+    <div class="absolute bottom-0 p-2 text-xs w-full text-white rounded-b-md crd-heading hover-hover:blur" v-if="description">
       <span class="overflow-hidden text-ellipsis line-clamp-2 ct">{{ description }}</span>
     </div>
   </div>

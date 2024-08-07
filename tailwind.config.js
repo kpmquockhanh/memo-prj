@@ -7,7 +7,11 @@ export default {
     "./src/**/*.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'hover-hover': {'raw': '(hover: hover)'},
+      }
+    },
   },
   // eslint-disable-next-line no-undef
   plugins: [require("daisyui")],
