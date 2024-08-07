@@ -105,27 +105,30 @@ const ratio = computed(() => {
     <WelcomeApp v-if="!items.length && !isLoading" @start="onShow"/>
    <template v-if="items.length">
      <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
-       <div v-for="item in items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
-         <DynamicImage
-           class="crd"
-           :src="item.fullPath"
-           :description="item.description || ''"
-           alt="egjs"
-           :clickable="true"
-           :loading-height="item.height * ratio"
-           :loading-width="item.width * ratio"
-         />
 
-         <div class="absolute top-1 left-1 w-5 h-5 avatar-image">
-           <DynamicImage circle :src="item.createdBy?.photoUrl" v-if="item.createdBy?.photoUrl" />
-           <Icon v-else size="20">
-             <UserIcon/>
-           </Icon>
+       <transition-group name="list">
+         <div v-for="item in items" :key="item._id" class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
+           <DynamicImage
+             class="crd"
+             :src="item.fullPath"
+             :description="item.description || ''"
+             alt="egjs"
+             :clickable="true"
+             :loading-height="item.height * ratio"
+             :loading-width="item.width * ratio"
+           />
+
+           <div class="absolute top-1 left-1 w-5 h-5 avatar-image">
+             <DynamicImage circle :src="item.createdBy?.photoUrl" v-if="item.createdBy?.photoUrl" />
+             <Icon v-else size="20">
+               <UserIcon/>
+             </Icon>
+           </div>
+           <button v-if="auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
+             ✕
+           </button>
          </div>
-         <button v-if="auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
-           ✕
-         </button>
-       </div>
+       </transition-group>
      </div>
      <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
        <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">

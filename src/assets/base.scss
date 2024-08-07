@@ -53,3 +53,17 @@
 .avatar-image {
   transition:all .5s ease-out
 }
+
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.component-wrapper {
+  margin-bottom: 10px;
+}

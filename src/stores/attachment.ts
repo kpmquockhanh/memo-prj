@@ -27,8 +27,15 @@ export const useAttachment = defineStore('attachment', () => {
     if (!options?.ignoreLoad) {
       isLoading.value = true
     }
+    if (options?.limit) {
+      limit.value = options?.limit
+    }
+    if (options?.page) {
+      page.value = options?.page
+    }
+
     const resp = await request.request('/v1/attachments', 'GET', {
-      params: { limit: limit.value, page: options?.page || page.value }
+      params: { limit: limit.value, page: page.value }
     })
     if (!options?.page || options?.page === 1) {
       items.value = resp.attachments || []
