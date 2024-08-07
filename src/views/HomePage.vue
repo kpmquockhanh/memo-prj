@@ -16,6 +16,7 @@ import CameraComponent from '@/views/CameraComponent.vue'
 import FriendsComponent from '@/views/FriendsComponent.vue'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
 import { useRouter } from 'vue-router'
+import { useUser } from '@/stores/user'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore);
@@ -30,6 +31,7 @@ const isShowCamera = ref(false)
 const dropzoneRef = ref<HTMLElement | null>(null)
 const masonryRef = ref<HTMLElement | null>(null)
 const router = useRouter()
+const userStore = useUser()
 
 onMounted(async () => {
   await doFetch()
@@ -87,6 +89,7 @@ const ratio = computed(() => {
   if (!columnWidths.value) {
     return 0
   }
+
   return columnWidths.value / 300
 })
 
@@ -95,8 +98,8 @@ const ratio = computed(() => {
 </script>
 <template>
   <div class="w-full">
-    <div v-if="false" class="flex justify-center mb-2">
-      <CountdownComponent/>
+    <div v-if="userStore.user?.memoryDate" class="flex justify-center mb-2">
+      <CountdownComponent :date="new Date(userStore.user?.memoryDate)" />
     </div>
 
     <div v-if="true" class="flex justify-center mb-2">

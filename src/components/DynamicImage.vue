@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useLazyload } from 'vue3-lazyload'
 import noImage from '@/assets/images/no-image.svg'
 
 const props = defineProps({
@@ -44,21 +43,21 @@ const path = computed(() => {
   return props.dummy ? noImage : props.src
 })
 
-const lazyRef = useLazyload(path, {
+const lazyOptions = {
+  src: path.value,
   lifecycle: {
     loading: () => {
       loading.value = true
     },
     loaded: () => {
       loading.value = false
-      // error.value = true
     },
     error: () => {
       loading.value = false
       error.value = true
     }
   }
-})
+}
 
 const previewOptions = props.clickable ? {
   imageUrl: path.value?.replace('preview/', ''),
@@ -74,7 +73,7 @@ const roundedClass = computed(() => {
 </script>
 
 <template>
-  <div v-if="path" class="flex justify-center w-full dynamic-image" :class="{'h-full': props.circle}">
+  <div v-if="path" class="flex flex-col justify-center w-full dynamic-image" :class="{'h-full': props.circle}">
     <div class="w-full overflow-hidden flex justify-center" v-if="loading">
       <div class="skeleton rounded-md" :style="{
       height: `${loadingHeight}px`,
@@ -83,23 +82,20 @@ const roundedClass = computed(() => {
     </div>
     <img
       v-if="!error && props.clickable"
-      ref="lazyRef"
+      v-lazy="{src: lazyOptions.src, lifecycle: lazyOptions.lifecycle, error: noImage}"
       :class="roundedClass"
       v-fullscreen-image="previewOptions"
       :alt="description"
-    >
+      src="#">
     <img
-      v-else-if="!error"
-      ref="lazyRef"
+      v-else
+      src="#"
+      v-lazy="{src: lazyOptions.src, lifecycle: lazyOptions.lifecycle, error: noImage}"
       :class="roundedClass"
       :alt="description"
     >
-    <img v-else
-         :class="roundedClass"
-         :src="noImage"
-         :alt="alt"
-    />
-    <div class="absolute bottom-0 p-2 text-xs w-full text-white rounded-b-md crd-heading hover-hover:blur" v-if="description">
+    <div class="absolute bottom-0 p-2 text-xs w-full text-white rounded-b-md crd-heading hover-hover:blur"
+         v-if="description">
       <span class="overflow-hidden text-ellipsis line-clamp-2 ct">{{ description }}</span>
     </div>
   </div>

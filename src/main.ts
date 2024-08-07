@@ -10,10 +10,12 @@ import "vue-toastification/dist/index.css";
 import VueLazyLoad from 'vue3-lazyload';
 import { fullscreenImagePlugin } from '@plugins/fullscreen-image-plugin';
 import '@plugins/fullscreen-image-plugin/assets/style.css';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 const app = createApp(App)
 app.use(createPinia())
-
+app.component('VueDatePicker', VueDatePicker);
 initApp().then(() => {
   app.use(Toast, {
     position: "bottom-right",

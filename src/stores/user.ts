@@ -36,6 +36,9 @@ export const useUser = defineStore('user', () => {
     if (data.language) {
       formData.append('language', data.language)
     }
+    if (data.date) {
+      formData.append('date', data.date)
+    }
     const resp = await http.request('/user', 'PUT', {
       body: formData
     })

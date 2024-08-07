@@ -45,6 +45,7 @@ export type User = {
   gender: string,
   photoUrl: string,
   username: string,
+  memoryDate: string,
 }
 
 export type UpdateUser = {
@@ -55,6 +56,7 @@ export type UpdateUser = {
   timezone?: number,
   deviceId?: string,
   image?: File,
+  date?: string,
 }
 
 export type ResponseUpdateUser = {

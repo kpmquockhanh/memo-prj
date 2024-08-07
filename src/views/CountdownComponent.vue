@@ -1,8 +1,21 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { onBeforeUnmount, onMounted, type Ref, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, type Ref, ref } from 'vue'
 
-const start = dayjs('2022-05-13', 'YYYY-MM-DD')
+const props = defineProps({
+  date: {
+    type: Date,
+    required: true
+  },
+  forceSplit: {
+    type: Boolean,
+    default: false
+  }
+})
+//2022-05-13
+const start = computed(() => {
+  return dayjs(props.date, 'YYYY-MM-DD')
+})
 
 
 const years: Ref<number> = ref(0)
@@ -19,7 +32,7 @@ let loop: NodeJS.Timeout
 onMounted(() => {
   loop = setInterval(() => {
     const currentDate = dayjs() // Get the current date
-    const diff = dayjs.duration(currentDate.diff(start))
+    const diff = dayjs.duration(currentDate.diff(start.value))
     years.value = diff.years()
     months.value = diff.months()
     days.value = diff.days()
@@ -36,7 +49,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col md:grid md:grid-flow-col gap-5 text-center auto-cols-max">
+  <div class="flex flex-col gap-5 text-center auto-cols-max" :class="{'md:grid md:grid-flow-col': !forceSplit}">
     <div class="md:flex grid grid-flow-col gap-5 text-center">
       <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
       <span class="countdown font-mono text-5xl">
