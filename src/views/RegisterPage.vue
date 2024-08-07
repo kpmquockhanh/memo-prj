@@ -38,9 +38,6 @@ const isValid = computed(() => {
 <template>
   <div class="flex flex-col gap-2 items-center w-full justify-center">
     <div class="card lg:card-side bg-base-100 shadow-xl">
-      <figure>
-        <img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album"/>
-      </figure>
       <div class="card-body">
         <h2 class="card-title">Welcome to my page!</h2>
         <label class="input input-bordered flex items-center gap-2">
