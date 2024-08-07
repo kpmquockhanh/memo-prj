@@ -103,7 +103,9 @@ router.beforeEach((to, from, next) => {
   }
 
   if (!isBlock) {
-    fetchInvitations().then()
+    if (isAuth) {
+      fetchInvitations().then()
+    }
     next()
   }
 })

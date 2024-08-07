@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import type { Attachment } from '@/types/base'
 import { useRequest } from '@/stores/http'
 import { useToast } from 'vue-toastification'
+import { useAuthStore } from '@/stores/auth'
 
 export const useAttachment = defineStore('attachment', () => {
   const items: Ref<Array<Attachment>> = ref([])
@@ -10,6 +11,7 @@ export const useAttachment = defineStore('attachment', () => {
   const toast = useToast()
   const page = ref(1)
   const limit = ref(10)
+  const authStore = useAuthStore()
 
   const isLoading = ref(false)
 
@@ -19,6 +21,9 @@ export const useAttachment = defineStore('attachment', () => {
     limit?: number,
     ignoreLoad?: boolean
   }) => {
+    if (!authStore.isAuth) {
+      return
+    }
     if (!options?.ignoreLoad) {
       isLoading.value = true
     }
@@ -75,5 +80,11 @@ export const useAttachment = defineStore('attachment', () => {
   const getSrc = (attachment: Attachment) => {
     return `${import.meta.env.VITE_API_DOMAIN}${attachment.src}`
   }
-  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading }
+
+  const reset = () => {
+    items.value = []
+    page.value = 1
+  }
+
+  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading, reset }
 })

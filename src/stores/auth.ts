@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import type { AuthRequest, AuthResponse, User } from '@/types/base'
 import dayjs from 'dayjs'
 import { useUser } from '@/stores/user'
+import { useAttachment } from '@/stores/attachment'
+import { useFriendStore } from '@/stores/friend'
 
 export const useAuthStore = defineStore('auth', () => {
   const isAuth = ref(false)
@@ -10,6 +12,8 @@ export const useAuthStore = defineStore('auth', () => {
   const lastPath = ref('')
 
   const userStore = useUser()
+  const attachmentStore = useAttachment()
+  const friendStore = useFriendStore()
 
   const processToken = (resJson: AuthResponse) => {
     isAuth.value = true
@@ -17,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = resToken
 
     localStorage.setItem('token', resToken)
-    userStore.fetchUser()
+    userStore.fetchUser().then()
     return true
   }
 
@@ -103,6 +107,9 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = ''
     userStore.resetUser()
     localStorage.removeItem('token')
+
+    attachmentStore.reset()
+    friendStore.reset()
   }
 
   const isAdmin = computed(() => userStore.user?.type === 'admin')

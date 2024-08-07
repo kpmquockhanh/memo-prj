@@ -78,6 +78,11 @@ export const useFriendStore = defineStore('friend', () => {
     isFinding.value = false
     return get(resp, 'users', []) as User[] || [] as User[]
   }
+
+  const reset = () => {
+    items.value = []
+    invitations.value = []
+  }
   return {
     items,
     isLoading,
@@ -91,5 +96,6 @@ export const useFriendStore = defineStore('friend', () => {
     declineInvitation,
     findFriends,
     sendInvitation,
+    reset,
   }
 })

@@ -15,6 +15,7 @@ import BaseModal from '@/views/BaseModal.vue'
 import CameraComponent from '@/views/CameraComponent.vue'
 import FriendsComponent from '@/views/FriendsComponent.vue'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
+import { useRouter } from 'vue-router'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore);
@@ -28,13 +29,18 @@ const isShowDeleteModal = ref(false)
 const isShowCamera = ref(false)
 const dropzoneRef = ref<HTMLElement | null>(null)
 const masonryRef = ref<HTMLElement | null>(null)
+const router = useRouter()
 
 onMounted(async () => {
   await doFetch()
 })
 
 const onShow = () => {
-  isShowModal.value = true
+  if (auth.isAuth) {
+    isShowModal.value = true
+    return
+  }
+  router.push({name: 'register'})
 }
 
 
