@@ -16,6 +16,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            export PATH="$PATH:/root/.nvm/versions/node/v20.15.1/bin
             cd multiple-tool-vue3
             git checkout .
             git pull origin main
