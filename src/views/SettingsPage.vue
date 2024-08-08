@@ -59,7 +59,7 @@ onMounted(async () => {
 <template>
   <div class="w-full">
     <div role="tablist" class="tabs tabs-lifted">
-      <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="General" />
+      <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="General" checked />
       <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <div class="flex flex-col-reverse md:flex-row gap-4 w-full">
           <template v-if="isFetching">
@@ -125,7 +125,6 @@ onMounted(async () => {
         role="tab"
         class="tab"
         aria-label="Advanced"
-        checked
       />
       <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <div class="flex flex-col-reverse md:flex-row gap-4 w-full">
