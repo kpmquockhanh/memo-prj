@@ -84,8 +84,15 @@ export const useRequest = defineStore('request', () => {
           toast.error('Unauthorized')
           return { error: 'Unauthorized' }
         case 403:
-          toast.error('Forbidden')
-          break
+        {
+          const resp = await response.json()
+          const error = get(resp, 'message', 'Forbidden')
+          toast.error(error)
+          return {
+            ...resp,
+            error,
+          }
+        }
         case 404:
           toast.error('Not found')
           return {
@@ -101,14 +108,14 @@ export const useRequest = defineStore('request', () => {
         default:
         {
           const resp = await response.json()
-          toast.error(get(resp, 'message', 'Unknown status'))
+          const error = get(resp, 'message', 'Unknown status')
+          toast.error(error)
           return {
             ...resp,
-            error: 'Unknown status',
+            error,
           }
         }
       }
-      return {}
     } catch (e) {
       console.log('error', e)
       return { error: e }

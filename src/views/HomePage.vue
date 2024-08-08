@@ -129,7 +129,7 @@ const ratio = computed(() => {
                <UserIcon/>
              </Icon>
            </div>
-           <button v-if="auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
+           <button v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
              ✕
            </button>
          </div>
