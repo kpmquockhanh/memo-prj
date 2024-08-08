@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, defineEmits, defineProps, onMounted, ref } from 'vue';
 import type { FullscreenImageProps } from '../types';
+import 'zoomist/css'
+import Zoomist from 'zoomist'
+
 const props = withDefaults(defineProps<FullscreenImageProps>(), {
   animation: 'fade',
   imageAlt: '',
@@ -14,6 +17,9 @@ const props = withDefaults(defineProps<FullscreenImageProps>(), {
   backdropColor: 'rgba(0, 0, 0, 0.7)',
   description: '',
 });
+
+// initialize
+
 
 const emits = defineEmits(['close']);
 
@@ -83,6 +89,16 @@ onMounted(() => {
   if (props.withFocusOnClose && closeButtonRef.value) {
     closeButtonRef.value.focus()
   }
+
+  const zoomist = new Zoomist('.zoomist-container',{
+    // Optional parameters
+    maxScale: 4,
+    bounds: true,
+    // if you need slider
+    // slider: true,
+    // if you need zoomer
+    // zoomer: true
+  });
 })
 </script>
 
@@ -111,34 +127,17 @@ onMounted(() => {
         </div>
       </div>
 
-      <template v-if="Array.isArray(imageUrl)">
-        <transition-group name="list" tag="div" class="image-container">
-          <button key="previouus" :disabled="isPreviousDisabled" :class="['icon', isPreviousDisabled && 'icon--disabled']"
-        @click="handlePrevious">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-          <template v-for="(currImage, index) in imageUrl" :key="currImage + index">
-            <img v-if="panoramaCurrentIndex === index" :src="currImage"
-              :alt="Array.isArray(imageAlt) ? imageAlt[panoramaCurrentIndex] : imageAlt" />
-          </template>
-          <button key="neeext" :disabled="isNextDisabled" :class="['icon', isNextDisabled && 'icon--disabled']"
-        @click="handleNext">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 6 15 12 9 18"></polyline>
-        </svg>
-      </button>
-        </transition-group>
-      </template>
-      <template v-else>
-        <div class="image-container flex-col text-gray-300 relative">
-          <img :src="imageUrl" :alt="Array.isArray(imageAlt) ? imageAlt[panoramaCurrentIndex] : imageAlt" />
-          <div class="absolute bottom-0 p-2 text-xs glass bg-gray-500 opacity-95 w-full" v-if="description">{{ description }}</div>
+      <!-- zoomist-container -->
+      <div class="zoomist-container mx-2 rounded w-full md:w-2/3">
+        <!-- zoomist-wrapper is required -->
+        <div class="zoomist-wrapper rounded">
+          <!-- zoomist-image is required -->
+          <div class="zoomist-image">
+            <!-- you can add anything you want to zoom here. -->
+            <img :src="imageUrl" alt="hehe"/>
+          </div>
         </div>
-      </template>
+      </div>
 
     </div>
   </Transition>
@@ -264,5 +263,21 @@ img {
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
+}
+
+
+.zoomist-container {
+
+}
+
+.zoomist-image {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.zoomist-image img {
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 </style>

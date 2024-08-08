@@ -3,12 +3,14 @@ import { useFriendStore } from '@/stores/friend'
 import { computed, ref } from 'vue'
 import DynamicImage from '@components/DynamicImage.vue'
 import SendIcon from '@vicons/fluent/Send24Regular'
+import Checkmark24Filled from '@vicons/fluent/Checkmark24Filled'
 import { Icon } from '@vicons/utils'
 import type { User } from '@/types/base'
 
 const friendStore = useFriendStore()
 const q = ref('')
 const items = ref<User[]>([])
+const isSent = ref<Map<string, boolean>>(new Map())
 const onSubmit = () => {
   if (!q.value || q.value.length < 5) return
   friendStore.findFriends(q.value).then(r => {
@@ -21,7 +23,9 @@ const isValid = computed(() => {
 })
 
 const onInvite = (userId: string) => {
-  friendStore.sendInvitation(userId)
+  friendStore.sendInvitation(userId).then(() => {
+    isSent.value.set(userId, true)
+  })
 }
 
 </script>
@@ -64,9 +68,10 @@ const onInvite = (userId: string) => {
                     <p class="text-sm text-gray-500">{{user.username }}</p>
                   </div>
                 </div>
-                <button class="btn" @click="onInvite(user._id)">
+                <button class="btn" @click="onInvite(user._id)" :disabled="isSent.get(user._id)">
                   <Icon size="24">
-                    <SendIcon/>
+                    <SendIcon v-if="!isSent.get(user._id)"/>
+                    <Checkmark24Filled v-else/>
                   </Icon>
                 </button>
               </div>

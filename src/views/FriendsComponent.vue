@@ -16,8 +16,8 @@ onMounted(async () => {
 
 <template>
  <div>
-   <transition-group name="list" tag="div" class="-space-x-3 rtl:space-x-reverse my-9">
-     <div class="tooltip ring rounded-full ring-white cursor-pointer" :data-tip="friend.username" v-for="friend in friendStore.items" :key="friend.username">
+   <transition-group name="list" tag="div" class="-space-x-3 hover-hover:-space-x-7 hover:-space-x-3 rtl:space-x-reverse my-9">
+     <div class="tooltip ring rounded-full ring-white cursor-pointer transition-all" :data-tip="friend.username" v-for="friend in friendStore.items" :key="friend.username">
        <div class="w-12 h-12 bg-white rounded-full">
          <DynamicImage v-if="friend.photoUrl" circle :src="friend.photoUrl"/>
          <UserIcon v-else class="rounded-full ring ring-gray-400"/>

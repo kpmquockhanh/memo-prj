@@ -1,8 +1,8 @@
 export interface FullscreenImageProps {
-  imageUrl: string | string[];
+  imageUrl: string;
   anchor?: string;
   animation?: 'fade' | 'blur' | 'none';
-  imageAlt?: string | string[];
+  imageAlt?: string;
   withDownload?: boolean;
   withClose?: boolean;
   withFocusOnClose?: boolean;

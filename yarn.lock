@@ -3243,3 +3243,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zoomist@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/zoomist/-/zoomist-2.1.1.tgz#51fdd0d5b975c1c3523237ebf0bcbb0c074e9082"
+  integrity sha512-QSvR5LbeyG7zgixfDsS5OAXX0fBuc+3FGk9AM3N/USzgppHGVEEYQfufAqwGqQtIZJLsG1R2Rg8edtz3W3kFPw==

@@ -1,7 +1,6 @@
 import { type DirectiveBinding, createApp, h } from 'vue';
 import FullscreenImage from '../component/FullscreenImage.vue';
 import { type FullscreenImageProps } from '../types';
-
 export interface HtmlElementWithMethod extends HTMLElement {
   openFullscreenImage: () => any
 }

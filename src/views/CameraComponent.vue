@@ -44,8 +44,10 @@ const { doUpload } = useAttachment()
 
 onMounted(() => {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    console.log('hereeee')
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
+        console.log('hereeee2')
         video.value.srcObject = stream
         video.value.play()
         loading.value = false
