@@ -20,7 +20,7 @@ app.use(createPinia())
 initApp().then(() => {
   app.component('VueDatePicker', VueDatePicker);
   app.use(vue3GoogleLogin, {
-    clientId: '899795654886-n1vinnd46m7td8frm6h7m5mgvkbe6bu9.apps.googleusercontent.com'
+    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   })
 
   app.use(Toast, {

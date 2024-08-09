@@ -61,7 +61,7 @@ const onLoginGoogle = async (response: any) => {
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Let's register!</h2>
-        <GoogleLogin :callback="onLoginGoogle" class="w-full flex justify-center" prompt/>
+        <GoogleLogin :callback="onLoginGoogle" class="w-full flex justify-center mt-2" prompt/>
         <div class="divider m-0">OR</div>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
