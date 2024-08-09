@@ -85,7 +85,7 @@ const onMyToggle = (e: ToggleEvent, name: string) => {
 const onLogout = () => {
   authState.logout();
   router.push({
-    name: 'home',
+    name: 'login',
   })
 }
 

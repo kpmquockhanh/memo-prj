@@ -129,7 +129,9 @@ const ratio = computed(() => {
                <UserIcon/>
              </Icon>
            </div>
-           <button v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin" class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
+           <button
+             v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin"
+                   class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
              ✕
            </button>
          </div>
@@ -143,7 +145,7 @@ const ratio = computed(() => {
      </div>
    </template>
 
-    <ul class="menu bg-base-200 rounded-box fixed right-1.5 bottom-1.5">
+    <ul class="menu bg-base-200 rounded-box fixed right-1.5 bottom-1.5 border border-gray-300">
       <li>
         <a class="tooltip tooltip-left" data-tip="Home">
           <svg

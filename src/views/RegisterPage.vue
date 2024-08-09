@@ -7,16 +7,17 @@ import { useAuthStore } from '@/stores/auth'
 import { computed, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
+import { GoogleLogin } from 'vue3-google-login'
 
 const password = ref('')
 const email = ref('')
 const name = ref('')
 
-const auth = useAuthStore()
+const authStore = useAuthStore()
 const toast = useToast()
 const router = useRouter()
 const onSubmit = async () => {
-  const result = await auth.register({
+  const result = await authStore.register({
     name: name.value,
     email: email.value,
     password: password.value,
@@ -30,16 +31,38 @@ const onSubmit = async () => {
   toast.error('Register failed!');
 }
 
+const routeToLogin = () => {
+  router.push('/login').then()
+}
+
 const isValid = computed(() => {
   return email.value && password.value && name.value
 })
+
+const onLoginGoogle = async (response: any) => {
+  const result = await authStore.loginWithGoogle(response.credential)
+  if (result) {
+    toast('Login success!');
+    if (authStore.lastPath) {
+      router.push(authStore.lastPath).then(() => {
+        authStore.setLastPath('')
+      })
+    } else {
+      router.push('/').then()
+    }
+    return
+  }
+}
+
 </script>
 
 <template>
   <div class="flex flex-col gap-2 items-center w-full justify-center">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <div class="card-body">
-        <h2 class="card-title">Welcome to my page!</h2>
+        <h2 class="card-title">Let's register!</h2>
+        <GoogleLogin :callback="onLoginGoogle" prompt/>
+        <div class="divider m-0">OR</div>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
             <Tag />
@@ -59,6 +82,10 @@ const isValid = computed(() => {
           <input type="password" class="grow" value="password" placeholder="password" v-model="password" autocomplete="off" />
         </label>
         <div class="card-actions justify-end mt-4">
+          <button class="btn" @click="routeToLogin">
+            <span>Go to login</span>
+          </button>
+
           <button :disabled="!isValid" class="btn btn-primary" @click="onSubmit">Register</button>
         </div>
       </div>

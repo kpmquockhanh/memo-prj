@@ -31,6 +31,7 @@
     "vue-router": "^4.3.0",
     "vue-toastification": "^2.0.0-rc.5",
     "vue3-dropzone": "^2.2.1",
+    "vue3-google-login": "^2.0.29",
     "vue3-lazyload": "^0.3.8",
     "yarn": "^1.22.22",
     "zoomist": "^2.1.1"

@@ -7,6 +7,7 @@ import type { AuthRequest } from '@/types/base'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { GoogleLogin } from 'vue3-google-login'
 
 const store = useAuthStore()
 const router = useRouter()
@@ -44,21 +45,43 @@ const onLogin = async () => {
   }
 }
 
+const routeToRegister = () => {
+  router.push('/register').then()
+}
+
+const onLoginGoogle = async (response: any) => {
+  const result = await store.loginWithGoogle(response.credential)
+  if (result) {
+    toast('Login success!');
+    if (store.lastPath) {
+      router.push(store.lastPath).then(() => {
+        store.setLastPath('')
+      })
+    } else {
+      router.push('/').then()
+    }
+    return
+  }
+}
+
 onMounted(() => {
   if (store.isAuth) {
     router.push('/').then()
   }
+  // googleOneTap()
+  //   .then(onLoginGoogle)
+  //   .catch((error) => {
+  //     console.log("Handle the error", error)
+  //   })
 });
 </script>
-
 <template>
   <div class="flex flex-col gap-2 items-center w-full justify-center">
     <div class="card lg:card-side bg-base-100 shadow-xl">
-<!--      <figure>-->
-<!--        <img src="https://daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.jpg" alt="Album" />-->
-<!--      </figure>-->
       <div class="card-body">
         <h2 class="card-title">Login page!</h2>
+        <GoogleLogin :callback="onLoginGoogle" prompt/>
+        <div class="divider m-0">OR</div>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
             <EmailIcon />
@@ -71,7 +94,13 @@ onMounted(() => {
           </Icon>
           <input type="password" class="grow" value="password" v-model="password" @keyup.enter="onLogin" :disabled="loading" />
         </label>
+
         <div class="card-actions justify-end mt-4">
+          <button class="btn" @click="routeToRegister" :disabled="loading">
+            <span v-if="!loading">Go to register</span>
+            <span v-else class="loading loading-white"></span>
+          </button>
+
           <button class="btn btn-primary" @click="onLogin" :disabled="loading">
             <span v-if="!loading">Login</span>
             <span v-else class="loading loading-white"></span>
@@ -81,7 +110,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
 <style scoped>
 
 </style>

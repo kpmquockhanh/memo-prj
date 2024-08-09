@@ -3156,6 +3156,11 @@ vue3-dropzone@^2.2.1:
     attr-accept "^2.2.2"
     file-selector "^0.2.4"
 
+vue3-google-login@^2.0.29:
+  version "2.0.29"
+  resolved "https://registry.yarnpkg.com/vue3-google-login/-/vue3-google-login-2.0.29.tgz#9cf010875289a5b960c0a0b1827974fc043d139e"
+  integrity sha512-e2QHk6brRDj6knKus6eG60AhHGrVhJALmYPwElZoQXYsL6IoFdfnVlflH+d6TnyQJwTlesCR3D/6zzdPSnAsSg==
+
 vue3-lazyload@^0.3.8:
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/vue3-lazyload/-/vue3-lazyload-0.3.8.tgz#82749a6b89a4d475c9a7fa409d0cff6c4abbd59d"

@@ -47,6 +47,26 @@ export const useAuthStore = defineStore('auth', () => {
     return false
   }
 
+  const loginWithGoogle = async (token: string) => {
+    const domain = import.meta.env.VITE_API_DOMAIN
+    const response = await fetch(`${domain}/user/oauthcallback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        code: token,
+      })
+    })
+    const resJson: AuthResponse = await response.json()
+
+    if (resJson.accessToken) {
+      processToken(resJson)
+      return true
+    }
+    return false
+  }
+
   const register = async (r: AuthRequest) => {
     const domain = import.meta.env.VITE_API_DOMAIN
     const response = await fetch(`${domain}/user`, {
@@ -125,6 +145,7 @@ export const useAuthStore = defineStore('auth', () => {
     initAuth,
     logout,
     login,
-    register
+    register,
+    loginWithGoogle,
   }
 })
