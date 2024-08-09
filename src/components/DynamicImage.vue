@@ -67,7 +67,7 @@ const previewOptions = props.clickable ? {
 } : {}
 
 const roundedClass = computed(() => {
-  return props.circle ? 'rounded-full aspect-square w-full' : 'rounded-md w-full'
+  return props.circle ? 'rounded-full aspect-square w-full object-cover' : 'rounded-md w-full'
 })
 
 </script>
