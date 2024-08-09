@@ -17,6 +17,10 @@ const start = computed(() => {
   return dayjs(props.date, 'YYYY-MM-DD')
 })
 
+const isShow = computed(() => {
+  return dayjs().isAfter(start.value)
+})
+
 
 const years: Ref<number> = ref(0)
 const months: Ref<number> = ref(0)
@@ -49,7 +53,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 text-center auto-cols-max" :class="{'md:grid md:grid-flow-col': !forceSplit}">
+  <div v-if="isShow" class="flex flex-col gap-5 text-center auto-cols-max" :class="{'md:grid md:grid-flow-col': !forceSplit}">
     <div class="md:flex grid grid-flow-col gap-5 text-center">
       <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
       <span class="countdown font-mono text-5xl">

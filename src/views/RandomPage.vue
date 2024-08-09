@@ -256,46 +256,45 @@ onMounted(() => {
         </kbd>
       </button>
     </div>
+    <dialog
+      id="my_modal_3"
+      ref="myModal"
+      class="modal"
+    >
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 class="font-bold text-lg">
+          Result!!!
+        </h3>
+        <div class="pt-4 pb-2">
+          <p class="text-2xl pb-2" v-if="isShowNames">
+            For: <strong>{{ randomName }}</strong>.
+          </p>
+          <p class="text-xl mt-3" v-if="isShowQuestions">
+            {{ randomQuestion }}
+          </p>
+        </div>
+        <div class="divider" />
+        <div class="pt-2 pb-4 flex justify-end gap-4">
+          <button
+            class="btn btn-outline-secondary"
+            @click="onCloseModal($event, true)"
+          >
+            Close and keep
+          </button>
+          <button
+            class="btn btn-primary"
+            ref="closeAndRemoveBtn"
+            @click="onCloseModal($event, false)"
+          >
+            Close and remove
+          </button>
+        </div>
+      </div>
+    </dialog>
   </div>
-
-  <dialog
-    id="my_modal_3"
-    ref="myModal"
-    class="modal"
-  >
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-          ✕
-        </button>
-      </form>
-      <h3 class="font-bold text-lg">
-        Result!!!
-      </h3>
-      <div class="pt-4 pb-2">
-        <p class="text-2xl pb-2" v-if="isShowNames">
-          For: <strong>{{ randomName }}</strong>.
-        </p>
-        <p class="text-xl mt-3" v-if="isShowQuestions">
-          {{ randomQuestion }}
-        </p>
-      </div>
-      <div class="divider" />
-      <div class="pt-2 pb-4 flex justify-end gap-4">
-        <button
-          class="btn btn-outline-secondary"
-          @click="onCloseModal($event, true)"
-        >
-          Close and keep
-        </button>
-        <button
-          class="btn btn-primary"
-          ref="closeAndRemoveBtn"
-          @click="onCloseModal($event, false)"
-        >
-          Close and remove
-        </button>
-      </div>
-    </div>
-  </dialog>
 </template>

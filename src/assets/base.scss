@@ -67,3 +67,53 @@
 .component-wrapper {
   margin-bottom: 10px;
 }
+
+
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .2s;
+}
+
+.fade-enter {
+  opacity: 1;
+}
+
+.blur-enter-from,
+.blur-leave-to {
+  filter: blur(5px);
+  opacity: 0;
+}
+
+.blur-enter-active,
+.blur-leave-active {
+  transition: filter .2s, opacity .5s;
+}
+
+.blur-enter {
+  filter: blur(0px);
+  opacity: 1;
+}
+.list-leave-active {
+  position: absolute;
+  transition: all 0.2s ease;
+}
+.list-move,
+.list-enter-active {
+  transition-delay: 0.2s;
+  transition: all 0.2s ease;
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

@@ -25,7 +25,9 @@ const isHideFooter = computed(() => {
       <div
         class="wrapper flex-grow flex px-2 pb-2"
       >
-        <Component :is="Component"/>
+        <transition name="fade" mode="out-in">
+          <Component :is="Component"/>
+        </transition>
       </div>
     </router-view>
   </div>

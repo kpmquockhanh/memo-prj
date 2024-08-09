@@ -106,51 +106,51 @@ onMounted(async () => {
     <div class="flex justify-center mb-3">
       <button class="btn btn-info" @click="onShowModal">Create new room</button>
     </div>
+
+    <dialog
+      id="create_room"
+      ref="createRoomModal"
+      class="modal"
+    >
+      <div class="modal-box">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 class="font-bold text-lg">
+          Create new room
+        </h3>
+
+        <div class="py-3 flex flex-col gap-2">
+          <label class="input input-bordered flex items-center gap-2">
+            <input type="text" class="grow" placeholder="Name" v-model="name" @keyup.enter="onCreate" />
+          </label>
+
+          <label class="input input-bordered flex items-center gap-2">
+            <input type="text" class="grow" placeholder="Description" v-model="description" @keyup.enter="onCreate" />
+          </label>
+        </div>
+        <div class="divider mt-0" />
+        <div class="pt-2 flex justify-end gap-4">
+          <button
+            class="btn btn-outline-secondary"
+            @click="onCloseModal"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-primary"
+            ref="createBtn"
+            :disabled="!isValid"
+          >
+            <span v-if="room.creating" class="loading loading-spinner"></span>
+            <span v-else @click="onCreate">Create!</span>
+          </button>
+        </div>
+      </div>
+    </dialog>
   </div>
-
-  <dialog
-    id="create_room"
-    ref="createRoomModal"
-    class="modal"
-  >
-    <div class="modal-box">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-          ✕
-        </button>
-      </form>
-      <h3 class="font-bold text-lg">
-        Create new room
-      </h3>
-
-      <div class="py-3 flex flex-col gap-2">
-        <label class="input input-bordered flex items-center gap-2">
-          <input type="text" class="grow" placeholder="Name" v-model="name" @keyup.enter="onCreate" />
-        </label>
-
-        <label class="input input-bordered flex items-center gap-2">
-          <input type="text" class="grow" placeholder="Description" v-model="description" @keyup.enter="onCreate" />
-        </label>
-      </div>
-      <div class="divider mt-0" />
-      <div class="pt-2 flex justify-end gap-4">
-        <button
-          class="btn btn-outline-secondary"
-          @click="onCloseModal"
-        >
-          Cancel
-        </button>
-        <button
-          class="btn btn-primary"
-          ref="createBtn"
-          :disabled="!isValid"
-        >
-          <span v-if="room.creating" class="loading loading-spinner"></span>
-          <span v-else @click="onCreate">Create!</span>
-        </button>
-      </div>
-    </div>
-  </dialog>
 </template>
 
 <style scoped>

@@ -180,25 +180,26 @@ const ratio = computed(() => {
       </template>
 
     </ul>
+
+    <BaseModal :show="isShowModal" @close="isShowModal = false" title="Upload">
+      <DropzoneComponent ref="dropzoneRef"/>
+      <template v-slot:action></template>
+    </BaseModal>
+
+    <BaseModal :show="isShowCamera" @close="isShowCamera = false" title="Camera">
+      <CameraComponent @uploaded="isShowCamera = false"/>
+      <template v-slot:action></template>
+    </BaseModal>
+
+    <BaseModal :loading="deleting" :show="isShowDeleteModal" @close="isShowDeleteModal = false" :ok="onRemove" title="Are you sure to delete this image?">
+      <DynamicImage
+        v-if="deletingItem"
+        class="flex justify-center py-4 w-full"
+        :src="deletingItem.fullPath"
+        :dummy="false"
+        :loading-height="deletingItem.height"
+        :loading-width="deletingItem.width"
+        alt="egjs" />
+    </BaseModal>
   </div>
-  <BaseModal :show="isShowModal" @close="isShowModal = false" title="Upload">
-    <DropzoneComponent ref="dropzoneRef"/>
-    <template v-slot:action></template>
-  </BaseModal>
-
-  <BaseModal :show="isShowCamera" @close="isShowCamera = false" title="Camera">
-    <CameraComponent @uploaded="isShowCamera = false"/>
-    <template v-slot:action></template>
-  </BaseModal>
-
-  <BaseModal :loading="deleting" :show="isShowDeleteModal" @close="isShowDeleteModal = false" :ok="onRemove" title="Are you sure to delete this image?">
-    <DynamicImage
-      v-if="deletingItem"
-      class="flex justify-center py-4 w-full"
-      :src="deletingItem.fullPath"
-      :dummy="false"
-      :loading-height="deletingItem.height"
-      :loading-width="deletingItem.width"
-      alt="egjs" />
-  </BaseModal>
 </template>
