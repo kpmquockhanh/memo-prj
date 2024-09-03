@@ -1,7 +1,8 @@
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { ResponseUpdateUser, UpdateUser, User } from '@/types/base'
+import type { Permissison, ResponseUpdateUser, Role, UpdateUser, User } from '@/types/base'
 import { useRequest } from '@/stores/http'
+import get from 'lodash/get'
 
 export const useUser = defineStore('user', () => {
   const user = ref<User>()
@@ -39,15 +40,34 @@ export const useUser = defineStore('user', () => {
     if (data.date) {
       formData.append('date', data.date)
     }
-    const resp = await http.request('/user', 'PUT', {
+    return await http.request('/user', 'PUT', {
       body: formData
     })
-    return resp
   }
 
   const resetUser = () => {
     user.value = undefined
   }
+
+  const permissions = computed(() => {
+    const rolePermissions = (get(user.value, 'roles', []) || []).map((r: Role) => r.permissions).flat().map((p: Permissison) => p.name)
+    const permissions = (get(user.value, 'permissions', []) || []).map((p: Permissison) => p.name)
+    return [...rolePermissions, ...permissions]
+  })
+
+  const roles = computed(() => {
+    return (get(user.value, 'roles', []) || []).map((r: Role) => r.name)
+  })
+
+  const can = computed(() => {
+    return (name: string) => {
+      if (roles.value.includes('SAdmin')) {
+        return true
+      }
+      return permissions.value.includes(name)
+    }
+  })
+
   return {
     user,
     images,
@@ -55,5 +75,9 @@ export const useUser = defineStore('user', () => {
     updateUser,
     resetUser,
     fetchImages,
+    can,
+
+    permissions,
+    roles,
   }
 })

@@ -42,14 +42,11 @@ export const useRequest = defineStore('request', () => {
     const body = isFormData ? req.body : JSON.stringify(req.body)
 
     const headers: { [key: string]: string; } = {
-      // "Content-Type": "application/json",
       "Authorization": `Bearer ${auth.token}`,
     }
 
     if (!isFormData) {
       headers['Content-Type'] = 'application/json'
-    } else {
-      // headers['Content-Type'] = 'multipart/form-data'
     }
 
     try {
@@ -70,19 +67,26 @@ export const useRequest = defineStore('request', () => {
         case 204:
           return {}
         case 400:
-          // toast.error('Bad request')
-          return await response.json()
+        {
+          const resp = await response.json()
+          const error = get(resp, 'message', 'Bad request')
+          toast.error(error)
+          return resp
+        }
         case 401:
+        {
           if (options?.ignoreAuth) {
             return { error: 'Unauthorized' }
           }
 
+          console.log('ROUTER', router)
           auth.logout()
           router.push({
             name: 'login',
           }).then()
           toast.error('Unauthorized')
           return { error: 'Unauthorized' }
+        }
         case 403:
         {
           const resp = await response.json()

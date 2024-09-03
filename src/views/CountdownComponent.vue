@@ -29,10 +29,7 @@ const days: Ref<number> = ref(0)
 const hours: Ref<number> = ref(0)
 const minutes: Ref<number> = ref(0)
 const seconds: Ref<number> = ref(0)
-
-
-let loop: NodeJS.Timeout
-
+let loop: number;
 onMounted(() => {
   loop = setInterval(() => {
     const currentDate = dayjs() // Get the current date

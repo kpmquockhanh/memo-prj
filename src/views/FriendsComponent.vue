@@ -23,7 +23,7 @@ const routeToFriendSearch = () => {
 </script>
 
 <template>
- <div>
+ <div v-if="authStore.isAuth">
    <transition-group name="list" tag="div" class="-space-x-3 hover-hover:-space-x-7 hover:-space-x-3 rtl:space-x-reverse my-9">
      <div class="flex items-center justify-center gap-2" v-if="!friendStore.items.length">
        <p class="text-gray-600 font-semibold text-sm">You dont have any friends.</p>

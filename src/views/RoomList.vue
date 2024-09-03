@@ -81,7 +81,7 @@ onMounted(async () => {
       <div v-else v-for="r in rooms" :key="r._id">
         <div class="card glass">
           <figure class="relative">
-            <img v-if="r.thumbnail" :src="r.thumbnail" alt="">
+            <img v-if="r.thumbnail" :src="r.thumbnail" alt="" class="aspect-square object-cover">
             <img v-else src="https://dummyimage.com/400x300" alt="" class="w-full" />
             <button class="btn btn-circle btn-xs absolute right-1 top-1" @click="onRemove(r._id)">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -131,7 +131,6 @@ onMounted(async () => {
             <input type="text" class="grow" placeholder="Description" v-model="description" @keyup.enter="onCreate" />
           </label>
         </div>
-        <div class="divider mt-0" />
         <div class="pt-2 flex justify-end gap-4">
           <button
             class="btn btn-outline-secondary"

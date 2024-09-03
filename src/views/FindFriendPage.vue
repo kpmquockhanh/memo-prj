@@ -1,26 +1,37 @@
 <script setup lang="ts">
 import { useFriendStore } from '@/stores/friend'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import DynamicImage from '@components/DynamicImage.vue'
 import SendIcon from '@vicons/fluent/Send24Regular'
 import Checkmark24Filled from '@vicons/fluent/Checkmark24Filled'
 import { Icon } from '@vicons/utils'
 import type { User } from '@/types/base'
+import Search24Regular from '@vicons/fluent/Search24Regular'
+import { useUser } from '@/stores/user'
 
 const friendStore = useFriendStore()
+const userStore = useUser()
 const q = ref('')
 const items = ref<User[]>([])
 const isSent = ref<Map<string, boolean>>(new Map())
 const onSubmit = () => {
   if (!q.value || q.value.length < 5) return
   friendStore.findFriends(q.value).then(r => {
-    items.value = r
+    items.value = r.filter((user) => userStore.user?._id !== user._id)
   })
 }
+
+onMounted(() => {
+  friendStore.fetch().then()
+})
 
 const isValid = computed(() => {
   return q.value.length >= 5
 })
+
+const checkIsFriend = (userId: string) => {
+  return friendStore.items.some((user) => user._id === userId)
+}
 
 const onInvite = (userId: string) => {
   friendStore.sendInvitation(userId).then(() => {
@@ -48,7 +59,11 @@ const onInvite = (userId: string) => {
 
             <button class="btn btn-primary" @click="onSubmit" :disabled="!isValid">
               <span v-if="friendStore.isFinding" class="loading loading-spinner"></span>
-              <span v-else>Find</span>
+              <span v-else>
+                <Icon size="24">
+                  <Search24Regular />
+                </Icon>
+              </span>
             </button>
           </div>
 
@@ -68,19 +83,15 @@ const onInvite = (userId: string) => {
                     <p class="text-sm text-gray-500">{{user.username }}</p>
                   </div>
                 </div>
-                <button class="btn" @click="onInvite(user._id)" :disabled="isSent.get(user._id)">
+                <button class="btn" @click="onInvite(user._id)" :disabled="isSent.get(user._id) || checkIsFriend(user._id)">
                   <Icon size="24">
-                    <SendIcon v-if="!isSent.get(user._id)"/>
+                    <SendIcon v-if="!isSent.get(user._id) && !checkIsFriend(user._id)"/>
                     <Checkmark24Filled v-else/>
                   </Icon>
                 </button>
               </div>
 
             </div>
-          </div>
-
-          <div class="card-actions justify-end">
-            <!--           <button class="btn btn-primary">Buy Now</button>-->
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ export const useAttachment = defineStore('attachment', () => {
   const request = useRequest()
   const toast = useToast()
   const page = ref(1)
-  const limit = ref(10)
+  const limit = ref(50)
   const authStore = useAuthStore()
 
   const isLoading = ref(false)

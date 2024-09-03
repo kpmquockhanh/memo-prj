@@ -33,6 +33,7 @@
     "vue3-dropzone": "^2.2.1",
     "vue3-google-login": "^2.0.29",
     "vue3-lazyload": "^0.3.8",
+    "vuedraggable": "^4.1.0",
     "yarn": "^1.22.22",
     "zoomist": "^2.1.1"
   },
