@@ -94,7 +94,7 @@ const roundedClass = computed(() => {
       :class="roundedClass"
       :alt="description"
     >
-    <div class="absolute bottom-0 p-2 text-xs w-full text-white rounded-b-md crd-heading hover-hover:blur"
+    <div class="absolute bottom-0 p-2 text-xxs md:text-xs w-full text-white rounded-b-md crd-heading hover-hover:blur"
          v-if="description">
       <span class="overflow-hidden text-ellipsis line-clamp-2 ct">{{ description }}</span>
     </div>
