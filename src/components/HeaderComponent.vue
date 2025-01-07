@@ -26,25 +26,25 @@ const menu = ref([
   {
     name: 'settings',
     label: 'Settings'
+  },
+  {
+    name: 'tools',
+    label: 'Tools',
+    children: [
+      {
+        name: 'randomPage',
+        label: 'Random'
+      },
+      {
+        name: 'ai_number',
+        label: 'Number prediction'
+      }
+      // {
+      //   name: 'questionPage',
+      //   label: 'Questions'
+      // }
+    ]
   }
-  // {
-  //   name: 'tools',
-  //   label: 'Tools',
-  //   children: [
-  //     {
-  //       name: 'randomPage',
-  //       label: 'Random'
-  //     },
-  //     {
-  //       name: 'ai_number',
-  //       label: 'Number prediction'
-  //     }
-  //     // {
-  //     //   name: 'questionPage',
-  //     //   label: 'Questions'
-  //     // }
-  //   ]
-  // }
 ])
 
 const accountMenu = computed(() => [
