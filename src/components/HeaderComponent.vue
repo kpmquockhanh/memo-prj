@@ -24,23 +24,27 @@ const menu = ref([
     label: 'Chat'
   },
   {
-    name: 'tools',
-    label: 'Tools',
-    children: [
-      {
-        name: 'randomPage',
-        label: 'Random'
-      },
-      {
-        name: 'ai_number',
-        label: 'Number prediction'
-      }
-      // {
-      //   name: 'questionPage',
-      //   label: 'Questions'
-      // }
-    ]
+    name: 'settings',
+    label: 'Settings'
   }
+  // {
+  //   name: 'tools',
+  //   label: 'Tools',
+  //   children: [
+  //     {
+  //       name: 'randomPage',
+  //       label: 'Random'
+  //     },
+  //     {
+  //       name: 'ai_number',
+  //       label: 'Number prediction'
+  //     }
+  //     // {
+  //     //   name: 'questionPage',
+  //     //   label: 'Questions'
+  //     // }
+  //   ]
+  // }
 ])
 
 const accountMenu = computed(() => [

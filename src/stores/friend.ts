@@ -7,7 +7,7 @@ import type { Invitation, User } from '@/types/base'
 export const useFriendStore = defineStore('friend', () => {
   const items = ref<User[]>([])
   const invitations = ref<Invitation[]>([])
-  const isLoading = ref(false)
+  const isLoading = ref(true)
   const isProcessingInvitation = ref(false)
   const isFinding = ref(false)
 

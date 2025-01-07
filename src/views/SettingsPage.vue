@@ -8,10 +8,14 @@ import { useToast } from 'vue-toastification'
 import CountdownComponent from '@/views/CountdownComponent.vue'
 import dayjs from 'dayjs'
 import RoleSettings from './RoleSettings.vue'
+import RemoveDuplicates from '@/views/RemoveDuplicates.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const preview = usePreviewImage()
 const user = useUser()
 const toast = useToast()
+const route = useRoute()
+const router = useRouter()
 
 
 const inputFile = ref<HTMLInputElement | null>(null)
@@ -20,6 +24,7 @@ const language = ref('')
 const date = ref(user.user?.memoryDate ? new Date(user.user?.memoryDate) : new Date())
 const isLoading = ref(false)
 const isFetching = ref(true)
+const activeTab = ref('')
 
 
 const isChanged = computed(() => {
@@ -55,13 +60,32 @@ onMounted(async () => {
   name.value = user.user?.name || ''
   language.value = user.user?.language || ''
   isFetching.value = false
+  if (route.query.tab) {
+    activeTab.value = route.query.tab as string
+  } else {
+    activeTab.value = 'general'
+  }
 })
+
+const changeTab = (tab: string) => {
+  activeTab.value = tab
+  router.push({ query: { tab } })
+}
 </script>
 
 <template>
   <div class="w-full container">
     <div role="tablist" class="tabs tabs-lifted">
-      <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="General" checked />
+      <!--   Tab general   -->
+      <input
+        type="radio"
+        name="my_tabs_2"
+        role="tab"
+        class="tab"
+        aria-label="General"
+        :checked="activeTab === 'general'"
+        @change="changeTab('general')"
+      />
       <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <div class="flex flex-col-reverse md:flex-row gap-4 w-full">
           <template v-if="isFetching">
@@ -121,13 +145,15 @@ onMounted(async () => {
           </template>
         </div>
       </div>
-
+      <!--   Tab timer   -->
       <input
         type="radio"
         name="my_tabs_2"
         role="tab"
         class="tab"
         aria-label="Timer"
+        :checked="activeTab === 'timer'"
+        @change="changeTab('timer')"
       />
       <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <div class="flex flex-col-reverse md:flex-row gap-4 w-full">
@@ -148,6 +174,7 @@ onMounted(async () => {
         </div>
 
       </div>
+      <!--   Tab roles & permissions   -->
       <input
         :disabled="!user.can('permissions')"
         type="radio"
@@ -155,9 +182,25 @@ onMounted(async () => {
         role="tab"
         class="tab"
         aria-label="Permissions"
+        :checked="activeTab === 'permissions'"
+        @change="changeTab('permissions')"
       />
       <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-        <RoleSettings v-if="user.can('permissions')"/>
+        <RoleSettings v-if="user.can('permissions') && activeTab === 'permissions'" />
+      </div>
+      <!--   Tab remove duplicates   -->
+      <input
+        :disabled="!user.can('remove-duplicates')"
+        type="radio"
+        name="my_tabs_2"
+        role="tab"
+        class="tab"
+        aria-label="Duplicates"
+        :checked="activeTab === 'remove-duplicates'"
+        @change="changeTab('remove-duplicates')"
+      />
+      <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+        <RemoveDuplicates v-if="user.can('remove-duplicates') && activeTab === 'remove-duplicates'" />
       </div>
     </div>
     <div class="flex justify-end mt-2">

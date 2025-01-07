@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 
 export const useAttachment = defineStore('attachment', () => {
   const items: Ref<Array<Attachment>> = ref([])
+  const unusedItems: Ref<Array<Attachment>> = ref([])
   const request = useRequest()
   const toast = useToast()
   const page = ref(1)
@@ -93,5 +94,31 @@ export const useAttachment = defineStore('attachment', () => {
     page.value = 1
   }
 
-  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading, reset }
+
+  const fetchUnusedAttachments = async () => {
+    if (!authStore.isAuth) {
+      return
+    }
+    isLoading.value = true
+    const resp = await request.request('/v1/attachments/unused', 'GET', {
+      params: {
+        limit: 100
+      }
+    })
+    isLoading.value = false
+    if (resp.error) {
+      return
+    }
+    unusedItems.value = resp.attachments || []
+  }
+
+  const deleteUnusedAttachment = async (id: string) => {
+    return request.request(`/v1/attachments/unused`, 'DELETE', {
+      body: {
+        ref_id: id,
+      }
+    })
+  }
+
+  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading, reset, fetchUnusedAttachments, deleteUnusedAttachment, unusedItems }
 })

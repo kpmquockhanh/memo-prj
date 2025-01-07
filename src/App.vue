@@ -2,9 +2,14 @@
 import { RouterView, useRoute } from 'vue-router'
 import Footer from '@/components/FooterComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useFriendStore } from '@/stores/friend'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute();
+const authStore = useAuthStore();
+const friendStore = useFriendStore();
+
 const classes = computed(() => {
   return {
     'h-screen': route.name === 'chat',
@@ -15,8 +20,15 @@ const classes = computed(() => {
 const isHideFooter = computed(() => {
   return route.name === 'chat';
 });
-</script>
 
+onMounted(() => {
+  setInterval(() => {
+    if (authStore.isAuth) {
+      friendStore.fetchInvitations()
+    }
+  }, 5000);
+})
+</script>
 
 <template>
   <div class="flex flex-col justify-between container mx-auto" :class="classes">
