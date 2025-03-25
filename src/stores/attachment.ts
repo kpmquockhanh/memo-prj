@@ -22,9 +22,6 @@ export const useAttachment = defineStore('attachment', () => {
     limit?: number,
     ignoreLoad?: boolean
   }) => {
-    if (!authStore.isAuth) {
-      return
-    }
     if (!options?.ignoreLoad) {
       isLoading.value = true
     }
@@ -34,17 +31,23 @@ export const useAttachment = defineStore('attachment', () => {
     if (options?.page) {
       page.value = options?.page
     }
+    const params = { limit: limit.value, page: page.value, type: 'default' }
+    let url = '/v1/attachments'
+    if (!authStore.isAuth) {
+      url = '/v1/attachments/public'
+      params.type = 'all'
+    }
 
-    const resp = await request.request('/v1/attachments', 'GET', {
-      params: { limit: limit.value, page: page.value }
+    const resp = await request.request(url, 'GET', {
+      params
     })
     if (!options?.page || options?.page === 1) {
-      items.value = resp.attachments || []
+      items.value = resp.data?.attachments || []
     } else {
-      items.value = [...items.value, ...(resp.attachments || [])]
+      items.value = [...items.value, ...(resp.data?.attachments || [])]
     }
     isLoading.value = false
-    total.value = resp.total
+    total.value = resp.data?.total
   }
 
   const isLastPage = computed(() => {
@@ -56,10 +59,11 @@ export const useAttachment = defineStore('attachment', () => {
     await doFetch({ page: page.value, ignoreLoad: true })
   }
 
-  const doUpload = async (file: File, description?: string) => {
+  const doUpload = async (file: File, description?: string, isPublic?: boolean) => {
     const formData = new FormData()
     formData.append('image', file)
     formData.append('name', file.name)
+    formData.append('public', isPublic ? 'true' : 'false')
     if (description) {
       formData.append('description', description)
     }
@@ -70,8 +74,8 @@ export const useAttachment = defineStore('attachment', () => {
       toast.error(resp.message || 'Upload failed')
       return false
     }
-    if (resp.attachment) {
-      items.value = [...[resp.attachment], ...items.value]
+    if (resp.data?.attachment) {
+      items.value = [...[resp.data?.attachment], ...items.value]
     }
     return true
   }

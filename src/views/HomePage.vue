@@ -19,7 +19,7 @@ import { useRouter } from 'vue-router'
 import { useUser } from '@/stores/user'
 
 const attachmentStore = useAttachment()
-const { items, isLastPage, isLoading } = storeToRefs(attachmentStore);
+const { items, isLastPage, isLoading } = storeToRefs(attachmentStore)
 const { doFetch, doRemove, nextPage } = attachmentStore
 const deleting = ref(false)
 const deletingItem: Ref<Attachment | null> = ref(null)
@@ -42,9 +42,8 @@ const onShow = () => {
     isShowModal.value = true
     return
   }
-  router.push({name: 'register'})
+  router.push({ name: 'register' })
 }
-
 
 const onRemove = async () => {
   if (!deletingItem.value) {
@@ -74,15 +73,15 @@ const onLoadMore = async () => {
 const columnWidths = computed(() => {
   const container = masonryRef.value
   if (!container) {
-    return 0;
+    return 0
   }
-  const computedStyle = window.getComputedStyle(container);
-  const columnGap = parseInt(computedStyle.columnGap) || 0;
-  const containerWidth = container.offsetWidth;
-  const columnCount = parseInt(computedStyle.columnCount);
+  const computedStyle = window.getComputedStyle(container)
+  const columnGap = parseInt(computedStyle.columnGap) || 0
+  const containerWidth = container.offsetWidth
+  const columnCount = parseInt(computedStyle.columnCount)
 
   // Calculate the width of a single column
-  return (containerWidth - (columnGap * (columnCount - 1))) / columnCount;
+  return (containerWidth - columnGap * (columnCount - 1)) / columnCount
 })
 
 const ratio = computed(() => {
@@ -92,9 +91,6 @@ const ratio = computed(() => {
 
   return columnWidths.value / 300
 })
-
-// Usage
-
 </script>
 <template>
   <div class="w-full">
@@ -103,47 +99,57 @@ const ratio = computed(() => {
     </div>
 
     <div v-if="true" class="flex justify-center mb-2">
-      <FriendsComponent/>
+      <FriendsComponent />
     </div>
-    <WelcomeApp v-if="!items.length && !isLoading" @start="onShow"/>
-   <template v-if="items.length">
-     <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
-       <transition-group name="list">
-         <div
-           v-for="item in items"
-           :key="item._id"
-           class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow">
-           <DynamicImage
-             class="crd"
-             :src="item.fullPath"
-             :description="item.description || ''"
-             alt="egjs"
-             :clickable="true"
-             :loading-height="item.height * ratio"
-             :loading-width="item.width * ratio"
-           />
+    <WelcomeApp v-if="!items.length && !isLoading" @start="onShow" />
+    <template v-if="items.length">
+      <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
+        <transition-group name="list">
+          <div
+            v-for="item in items"
+            :key="item._id"
+            class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow"
+          >
+            <DynamicImage
+              class="crd"
+              :src="item.fullPath"
+              :description="item.description || ''"
+              alt="egjs"
+              :clickable="true"
+              :loading-height="item.height * ratio"
+              :loading-width="item.width * ratio"
+            />
 
-           <div class="absolute top-1 left-1 w-5 h-5 avatar-image">
-             <DynamicImage circle :src="item.createdBy?.photoUrl" v-if="item.createdBy?.photoUrl" />
-             <Icon v-else size="20">
-               <UserIcon/>
-             </Icon>
-           </div>
-           <button
-             v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin"
-                   class="btn btn-sm btn-circle btn-ghost absolute top-1 right-1" @click="onClickRemove(item)">
-             ✕
-           </button>
-         </div>
-       </transition-group>
-     </div>
-     <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
-       <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
-         <span v-if="isLoadingMore" class="loading loading-dots loading-xs"></span>
-         <span v-else>Load more</span>
-       </button>
-     </div>
-   </template>
+            <div
+              class="absolute top-1 left-1 w-5 h-5 avatar-image ring rounded-full ring-2"
+              :class="{ 'ring-green-500': item.public, 'ring-blue-500': !item.public }"
+            >
+              <DynamicImage
+                circle
+                :src="item.createdBy?.photoUrl"
+                v-if="item.createdBy?.photoUrl"
+              />
+              <Icon v-else size="20">
+                <UserIcon />
+              </Icon>
+            </div>
+            <button
+              v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin"
+              class="btn btn-xs btn-circle btn-ghost absolute top-1 right-1 text-red-500 bg-gray-700"
+              @click="onClickRemove(item)"
+            >
+              ✕
+            </button>
+          </div>
+        </transition-group>
+      </div>
+      <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
+        <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
+          <span v-if="isLoadingMore" class="loading loading-dots loading-xs"></span>
+          <span v-else>Load more</span>
+        </button>
+      </div>
+    </template>
 
     <ul class="menu bg-base-200 rounded-box fixed right-1.5 bottom-1.5 border border-gray-300">
       <li>
@@ -153,12 +159,14 @@ const ratio = computed(() => {
             class="h-5 w-5"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor">
+            stroke="currentColor"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
           </svg>
         </a>
       </li>
@@ -171,27 +179,36 @@ const ratio = computed(() => {
           </a>
         </li>
         <li v-if="auth.isAdmin">
-          <a class="tooltip tooltip-left flex" data-tip="Camera" @click.prevent="isShowCamera = true">
+          <a
+            class="tooltip tooltip-left flex"
+            data-tip="Camera"
+            @click.prevent="isShowCamera = true"
+          >
             <Icon size="20">
               <Camera />
             </Icon>
           </a>
         </li>
       </template>
-
     </ul>
 
     <BaseModal :show="isShowModal" @close="isShowModal = false" title="Upload">
-      <DropzoneComponent ref="dropzoneRef"/>
+      <DropzoneComponent ref="dropzoneRef" />
       <template v-slot:action></template>
     </BaseModal>
 
     <BaseModal :show="isShowCamera" @close="isShowCamera = false" title="Camera">
-      <CameraComponent @uploaded="isShowCamera = false"/>
+      <CameraComponent @uploaded="isShowCamera = false" />
       <template v-slot:action></template>
     </BaseModal>
 
-    <BaseModal :loading="deleting" :show="isShowDeleteModal" @close="isShowDeleteModal = false" :ok="onRemove" title="Are you sure to delete this image?">
+    <BaseModal
+      :loading="deleting"
+      :show="isShowDeleteModal"
+      @close="isShowDeleteModal = false"
+      :ok="onRemove"
+      title="Are you sure to delete this image?"
+    >
       <DynamicImage
         v-if="deletingItem"
         class="flex justify-center py-4 w-full"
@@ -199,7 +216,8 @@ const ratio = computed(() => {
         :dummy="false"
         :loading-height="deletingItem.height"
         :loading-width="deletingItem.width"
-        alt="egjs" />
+        alt="egjs"
+      />
     </BaseModal>
   </div>
 </template>

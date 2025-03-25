@@ -9,8 +9,13 @@
             <div>Roles</div>
 
             <div class="flex gap-2">
-              <input v-model="roleName" type="text" placeholder="Role name"
-                     class="input input-sm input-bordered w-full" @keyup.enter="onAddRole" />
+              <input
+                v-model="roleName"
+                type="text"
+                placeholder="Role name"
+                class="input input-sm input-bordered w-full"
+                @keyup.enter="onAddRole"
+              />
               <button class="btn btn-sm btn-primary" @click="onAddRole">Add</button>
             </div>
             <div v-for="role in permissionStore.allItems?.roles" :key="role.name">
@@ -28,7 +33,8 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"></path>
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
                 </svg>
               </div>
             </div>
@@ -36,8 +42,13 @@
           <div class="flex flex-col gap-2">
             <div>Permissions</div>
             <div class="flex gap-2">
-              <input v-model="permissionName" type="text" placeholder="Permission name"
-                     class="input input-sm input-bordered w-full" @keyup.enter="onAddPermission" />
+              <input
+                v-model="permissionName"
+                type="text"
+                placeholder="Permission name"
+                class="input input-sm input-bordered w-full"
+                @keyup.enter="onAddPermission"
+              />
               <button class="btn btn-sm btn-primary" @click="onAddPermission">Add</button>
             </div>
             <div v-for="permission in permissionStore.allPermissions" :key="permission.id">
@@ -55,7 +66,8 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"></path>
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
                   </svg>
                 </div>
               </div>
@@ -69,16 +81,20 @@
       <div class="collapse-title text-xl font-medium">Assign roles & permissions</div>
       <div class="collapse-content">
         <div class="grid grid-cols-6 gap-4">
-          <div v-for="role in permissionStore.allItems?.roles.filter(r => r.name !== 'SAdmin')" :key="role.name">
+          <div
+            v-for="role in permissionStore.allItems?.roles.filter((r) => r.name !== 'SAdmin')"
+            :key="role.name"
+          >
             <div class="label">
               <span class="label-text font-bold">{{ role.name }}</span>
             </div>
             <div class="flex flex-col gap-2">
               <SCheckbox
-                v-for="permission in permissionStore.allPermissions" :key="permission.id"
+                v-for="permission in permissionStore.allPermissions"
+                :key="permission.id"
                 :id="role._id"
                 :label="permission.name"
-                :checked="role.permissions.includes(permission.id)"
+                :checked="role.permissions.some((p) => p.id === permission.id)"
                 @change="onChangeRole(role, permission, $event)"
               />
             </div>
@@ -92,7 +108,14 @@
       <div class="collapse-title text-xl font-medium">Assign users</div>
       <div class="collapse-content">
         <div class="dropdown w-full">
-          <input tabindex="0" role="button" class="input input-sm m-1 w-full" placeholder="Search users" @keyup.enter="onSearch" v-model="q"/>
+          <input
+            tabindex="0"
+            role="button"
+            class="input input-sm m-1 w-full"
+            placeholder="Search users"
+            @keyup.enter="onSearch"
+            v-model="q"
+          />
           <ul tabindex="0" class="dropdown-content z-10 menu bg-base-100 rounded-box shadow p-1">
             <li v-if="!searchedUser.length"><a href="#">Minimum 5 characters</a></li>
             <li v-for="user in searchedUser" :key="user._id">
@@ -119,10 +142,9 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
-<script setup>
+<script setup lang="js">
 import { nextTick, onMounted, ref } from 'vue'
 import { usePermissionStore } from '@/stores/permission'
 import SCheckbox from './SCheckbox.vue'
@@ -151,7 +173,7 @@ const onAddPermission = async () => {
 
 const onSearch = () => {
   if (!q.value || q.value.length < 5) return
-  friendStore.findFriends(q.value).then(r => {
+  friendStore.findFriends(q.value).then((r) => {
     searchedUser.value = r
   })
 }
@@ -199,7 +221,7 @@ const onRemoveRole = async (id) => {
 const onChangeRole = async (role, newPermission, ev) => {
   let permissions = [...role.permissions]
   if (!ev.target.checked) {
-    permissions = permissions.filter(p => p !== newPermission.id)
+    permissions = permissions.filter((p) => p !== newPermission.id)
   } else {
     permissions = uniq([...role.permissions, newPermission.id])
   }
@@ -217,6 +239,6 @@ const onChangeRole = async (role, newPermission, ev) => {
 
 onMounted(() => {
   permissionStore.fetchPermissions().then()
+  userStore.fetchUsers().then()
 })
-
 </script>

@@ -29,6 +29,7 @@ export type Attachment = {
   width: number,
   height: number,
   description: string,
+  public: boolean,
 }
 
 export type User = {
@@ -87,6 +88,7 @@ export type Invitation = {
 export type Permissison = {
   name: string,
   _id: string,
+  id: string,
 }
 
 export type Role = {

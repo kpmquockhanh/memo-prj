@@ -5,12 +5,13 @@ import { Icon } from '@vicons/utils'
 import { useAuthStore } from '@/stores/auth'
 import type { AuthRequest } from '@/types/base'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { GoogleLogin } from 'vue3-google-login'
 
 const store = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const email = ref('')
 const password = ref('')
@@ -28,20 +29,27 @@ const onLogin = async () => {
 
     loading.value = false
     if (result) {
-      toast('Login success!');
+      toast('Login success!')
+
       if (store.lastPath) {
-        router.push(store.lastPath).then(() => {
+        if (store.lastPath.includes('wedding')) {
+          window.location.replace(store.lastPath)
           store.setLastPath('')
-        })
+        } else {
+          router.push(store.lastPath).then(() => {
+            store.setLastPath('')
+          })
+        }
       } else {
         router.push('/').then()
       }
+
       return
     }
-    toast.error('Login failed!');
+    toast.error('Login failed!')
   } catch (e) {
     loading.value = false
-    toast.error('Login failed!');
+    toast.error('Login failed!')
   }
 }
 
@@ -52,11 +60,17 @@ const routeToRegister = () => {
 const onLoginGoogle = async (response: any) => {
   const result = await store.loginWithGoogle(response.credential)
   if (result) {
-    toast('Login success!');
+    toast('Login success!')
     if (store.lastPath) {
-      router.push(store.lastPath).then(() => {
+      if (store.lastPath.includes('wedding')) {
+        console.log('goes here')
+        window.location.replace(store.lastPath)
         store.setLastPath('')
-      })
+      } else {
+        router.push(store.lastPath).then(() => {
+          store.setLastPath('')
+        })
+      }
     } else {
       router.push('/').then()
     }
@@ -68,31 +82,50 @@ onMounted(() => {
   if (store.isAuth) {
     router.push('/').then()
   }
+
+  const { lastPath } = route.query
+  if (lastPath) {
+    store.setLastPath(String(lastPath))
+  }
   // googleOneTap()
   //   .then(onLoginGoogle)
   //   .catch((error) => {
   //     console.log("Handle the error", error)
   //   })
-});
+})
 </script>
 <template>
   <div class="flex flex-col gap-2 items-center w-full justify-center">
     <div class="card lg:card-side bg-base-100 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Login page!</h2>
-        <GoogleLogin :callback="onLoginGoogle" class="w-full flex justify-center mt-2" prompt/>
+        <GoogleLogin :callback="onLoginGoogle" class="w-full flex justify-center mt-2" prompt />
         <div class="divider m-0">OR</div>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
             <EmailIcon />
           </Icon>
-          <input type="text" class="grow" placeholder="Email" v-model="email" @keyup.enter="onLogin" :disabled="loading" />
+          <input
+            type="text"
+            class="grow"
+            placeholder="Email"
+            v-model="email"
+            @keyup.enter="onLogin"
+            :disabled="loading"
+          />
         </label>
         <label class="input input-bordered flex items-center gap-2">
           <Icon>
             <KeyIcon />
           </Icon>
-          <input type="password" class="grow" value="password" v-model="password" @keyup.enter="onLogin" :disabled="loading" />
+          <input
+            type="password"
+            class="grow"
+            value="password"
+            v-model="password"
+            @keyup.enter="onLogin"
+            :disabled="loading"
+          />
         </label>
 
         <div class="card-actions justify-end mt-4">
@@ -110,6 +143,4 @@ onMounted(() => {
     </div>
   </div>
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>

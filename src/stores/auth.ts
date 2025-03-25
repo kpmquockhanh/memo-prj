@@ -1,6 +1,6 @@
-import { computed, type Ref, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { AuthRequest, AuthResponse, User } from '@/types/base'
+import type { AuthRequest, AuthResponse } from '@/types/base'
 import dayjs from 'dayjs'
 import { useUser } from '@/stores/user'
 import { useAttachment } from '@/stores/attachment'
@@ -80,7 +80,7 @@ export const useAuthStore = defineStore('auth', () => {
         password: r.password,
         language: "en",
         platform: "IOS",
-        timezone: dayjs().utcOffset()/60,
+        timezone: dayjs().utcOffset() / 60,
         deviceId: "1234"
       })
     })

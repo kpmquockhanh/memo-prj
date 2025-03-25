@@ -6,8 +6,9 @@ import get from 'lodash/get'
 
 export const useUser = defineStore('user', () => {
   const user = ref<User>()
+  const users = ref<User[]>([])
 
-  const images = ref<{[key: string]: string}>()
+  const images = ref<{ [key: string]: string }>()
 
   const http = useRequest()
 
@@ -19,7 +20,7 @@ export const useUser = defineStore('user', () => {
   const fetchUser = async (opts?: {
     ignoreAuth?: boolean,
   }) => {
-   const resp = await http.request('/user', 'GET', {}, opts)
+    const resp = await http.request('/user', 'GET', {}, opts)
     if (resp.error) {
       return
     }
@@ -61,12 +62,22 @@ export const useUser = defineStore('user', () => {
 
   const can = computed(() => {
     return (name: string) => {
+      // Supper User can do any action
       if (roles.value.includes('SAdmin')) {
         return true
       }
       return permissions.value.includes(name)
     }
   })
+
+  const fetchUsers = async () => {
+    const resp = await http.request('/v1/permissions/users', 'GET', {})
+    if (resp.error) {
+      return
+    }
+    users.value = resp.users;
+
+  }
 
   return {
     user,
@@ -76,6 +87,7 @@ export const useUser = defineStore('user', () => {
     resetUser,
     fetchImages,
     can,
+    fetchUsers,
 
     permissions,
     roles,

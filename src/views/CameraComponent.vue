@@ -3,11 +3,24 @@
     <div class="flex justify-center w-full">
       <span v-if="loading" class="loading loading-dots loading-lg"></span>
     </div>
-    <video class="rounded-md scale-x-[-1]" v-show="!loading && !image" ref="video" width="640" height="480" autoplay></video>
-    <canvas ref="canvas" width="640" height="480" style="display:none;"></canvas>
+    <video
+      class="rounded-md scale-x-[-1]"
+      v-show="!loading && !image"
+      ref="video"
+      width="640"
+      height="480"
+      autoplay
+    ></video>
+    <canvas ref="canvas" width="640" height="480" style="display: none"></canvas>
     <div v-if="image" class="flex flex-col gap-2">
       <img :src="image" class="rounded-md mt-3" alt="Captured image" />
-      <textarea :disabled="isUploading" type="text" class="textarea textarea-info" placeholder="Description" v-model="description" />
+      <textarea
+        :disabled="isUploading"
+        type="text"
+        class="textarea textarea-info"
+        placeholder="Description"
+        v-model="description"
+      />
     </div>
     <div class="w-full flex justify-center mt-3 gap-2">
       <button v-if="!image" class="btn btn-info btn-lg btn-circle text-white" @click="captureImage">
@@ -44,15 +57,14 @@ const { doUpload } = useAttachment()
 
 onMounted(() => {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    console.log('hereeee')
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        console.log('hereeee2')
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
         video.value.srcObject = stream
         video.value.play()
         loading.value = false
       })
-      .catch(error => {
+      .catch((error) => {
         loading.value = false
         console.error('Error accessing the camera:', error)
       })
@@ -63,7 +75,7 @@ onBeforeUnmount(() => {
   if (video.value) {
     const stream = video.value.srcObject
     const tracks = stream.getTracks()
-    tracks.forEach(track => {
+    tracks.forEach((track) => {
       track.stop()
     })
     video.value.srcObject = null
@@ -74,23 +86,23 @@ const captureImage = () => {
   const ctx = canvas.value?.getContext('2d')
   // Move to the center of the canvas
   ctx.save()
-  ctx.translate(canvas.value.width / 2, canvas.value.height / 2);
+  ctx.translate(canvas.value.width / 2, canvas.value.height / 2)
 
   // Scale the canvas
-  ctx.scale(-1, 1);
+  ctx.scale(-1, 1)
 
   // Move back to the top-left corner
-  ctx.translate(-canvas.value.width / 2, -canvas.value.height / 2);
+  ctx.translate(-canvas.value.width / 2, -canvas.value.height / 2)
   ctx.drawImage(video.value, 0, 0, 640, 480)
   ctx.restore()
   image.value = canvas.value?.toDataURL('image/png')
 }
 
 const generateImage = () => {
-  const blobBin = atob(image.value?.split(',')[1]);
-  const array = [];
-  for(let i = 0; i < blobBin.length; i++) {
-    array.push(blobBin.charCodeAt(i));
+  const blobBin = atob(image.value?.split(',')[1])
+  const array = []
+  for (let i = 0; i < blobBin.length; i++) {
+    array.push(blobBin.charCodeAt(i))
   }
   return new Blob([new Uint8Array(array)], { type: 'image/png' })
 }
@@ -102,13 +114,13 @@ const reset = () => {
 const doSubmit = () => {
   if (!image.value) return
   isUploading.value = true
-  doUpload(generateImage(), description.value).then(() => {
-    reset()
-    emit('uploaded')
-  })
+  doUpload(generateImage(), description.value)
+    .then(() => {
+      reset()
+      emit('uploaded')
+    })
     .finally(() => {
       isUploading.value = false
     })
 }
-
 </script>

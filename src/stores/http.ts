@@ -67,36 +67,35 @@ export const useRequest = defineStore('request', () => {
         case 204:
           return {}
         case 400:
-        {
-          const resp = await response.json()
-          const error = get(resp, 'message', 'Bad request')
-          toast.error(error)
-          return resp
-        }
+          {
+            const resp = await response.json()
+            const error = get(resp, 'message', 'Bad request')
+            toast.error(error)
+            return resp
+          }
         case 401:
-        {
-          if (options?.ignoreAuth) {
+          {
+            if (options?.ignoreAuth) {
+              return { error: 'Unauthorized' }
+            }
+
+            auth.logout()
+            router.push({
+              name: 'login',
+            }).then()
+            toast.error('Unauthorized')
             return { error: 'Unauthorized' }
           }
-
-          console.log('ROUTER', router)
-          auth.logout()
-          router.push({
-            name: 'login',
-          }).then()
-          toast.error('Unauthorized')
-          return { error: 'Unauthorized' }
-        }
         case 403:
-        {
-          const resp = await response.json()
-          const error = get(resp, 'message', 'Forbidden')
-          toast.error(error)
-          return {
-            ...resp,
-            error,
+          {
+            const resp = await response.json()
+            const error = get(resp, 'message', 'Forbidden')
+            toast.error(error)
+            return {
+              ...resp,
+              error,
+            }
           }
-        }
         case 404:
           toast.error('Not found')
           return {
@@ -110,15 +109,15 @@ export const useRequest = defineStore('request', () => {
             error: 'Server error',
           }
         default:
-        {
-          const resp = await response.json()
-          const error = get(resp, 'message', 'Unknown status')
-          toast.error(error)
-          return {
-            ...resp,
-            error,
+          {
+            const resp = await response.json()
+            const error = get(resp, 'message', 'Unknown status')
+            toast.error(error)
+            return {
+              ...resp,
+              error,
+            }
           }
-        }
       }
     } catch (e) {
       console.log('error', e)
