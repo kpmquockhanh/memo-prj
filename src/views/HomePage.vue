@@ -17,10 +17,11 @@ import FriendsComponent from '@/views/FriendsComponent.vue'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/stores/user'
+import MoreVertical from '@vicons/ionicons5/EllipsisVertical'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore)
-const { doFetch, doRemove, nextPage } = attachmentStore
+const { doFetch, doRemove, nextPage, toggleVisibility } = attachmentStore
 const deleting = ref(false)
 const deletingItem: Ref<Attachment | null> = ref(null)
 const isLoadingMore = ref(false)
@@ -91,6 +92,11 @@ const ratio = computed(() => {
 
   return columnWidths.value / 300
 })
+
+const onToggleVisibility = async (item: Attachment) => {
+  const newVisibility = !item.public
+  await toggleVisibility(item._id, newVisibility)
+}
 </script>
 <template>
   <div class="w-full">
@@ -133,13 +139,25 @@ const ratio = computed(() => {
                 <UserIcon />
               </Icon>
             </div>
-            <button
-              v-if="(auth.isAuth && userStore.user?._id === item.createdBy?._id) || auth.isAdmin"
-              class="btn btn-xs btn-circle btn-ghost absolute top-1 right-1 text-red-500 bg-gray-700"
-              @click="onClickRemove(item)"
-            >
-              ✕
-            </button>
+            <div class="dropdown dropdown-end absolute top-1 right-1">
+              <label tabindex="0" class="btn btn-xs btn-circle btn-ghost">
+                <Icon size="16">
+                  <MoreVertical />
+                </Icon>
+              </label>
+              <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
+                <li v-if="item.can_delete">
+                  <a @click="onClickRemove(item)" class="text-xs text-red-500">
+                    <span>Delete</span>
+                  </a>
+                </li>
+                <li>
+                  <a @click="onToggleVisibility(item)" class="text-xs text-blue-500">
+                    <span>{{ item.public ? 'Make Private' : 'Make Public' }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </transition-group>
       </div>
@@ -216,6 +234,8 @@ const ratio = computed(() => {
         :dummy="false"
         :loading-height="deletingItem.height"
         :loading-width="deletingItem.width"
+        :max-height="300"
+        :lazy="false"
         alt="egjs"
       />
     </BaseModal>

@@ -30,6 +30,7 @@ export type Attachment = {
   height: number,
   description: string,
   public: boolean,
+  can_delete: boolean,
 }
 
 export type User = {

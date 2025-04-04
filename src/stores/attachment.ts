@@ -89,6 +89,24 @@ export const useAttachment = defineStore('attachment', () => {
     items.value = items.value.filter((item) => item._id !== id)
   }
 
+  const toggleVisibility = async (id: string, isPublic: boolean) => {
+    const resp = await request.request(`/v1/attachments/${id}/visibility`, 'PUT', {
+      body: {
+        public: isPublic
+      }
+    })
+    if (resp.error) {
+      toast.error('Failed to update visibility')
+      return false
+    }
+    // Update the item in the list
+    const index = items.value.findIndex(item => item._id === id)
+    if (index !== -1) {
+      items.value[index] = { ...items.value[index], public: isPublic }
+    }
+    return true
+  }
+
   const getSrc = (attachment: Attachment) => {
     return `${import.meta.env.VITE_API_DOMAIN}${attachment.src}`
   }
@@ -124,5 +142,20 @@ export const useAttachment = defineStore('attachment', () => {
     })
   }
 
-  return { items, page, doFetch, getSrc, doUpload, doRemove, nextPage, isLastPage, isLoading, reset, fetchUnusedAttachments, deleteUnusedAttachment, unusedItems }
+  return { 
+    items, 
+    page, 
+    doFetch, 
+    getSrc, 
+    doUpload, 
+    doRemove,
+    toggleVisibility,
+    nextPage, 
+    isLastPage, 
+    isLoading, 
+    reset, 
+    fetchUnusedAttachments, 
+    deleteUnusedAttachment, 
+    unusedItems,
+  }
 })
