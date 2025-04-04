@@ -77,10 +77,10 @@ const roundedClass = computed(() => {
   return props.circle ? 'rounded-full aspect-square w-full object-cover' : 'rounded-md w-full'
 })
 const style = computed(() => {
-  return  {
-    'object-fit': props.maxHeight ? 'contain': 'unset', 
-    'max-height': props.maxHeight ? props.maxHeight + 'px' : 'unset',
-  }
+  return {
+    objectFit: props.maxHeight ? 'contain' : 'unset',
+    maxHeight: props.maxHeight ? `${props.maxHeight}px` : 'unset',
+  } as const
 })
 
 </script>
