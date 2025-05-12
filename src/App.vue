@@ -26,7 +26,7 @@ onMounted(() => {
     if (authStore.isAuth) {
       friendStore.fetchInvitations()
     }
-  }, 5000)
+  }, 20000)
 })
 </script>
 

@@ -5,9 +5,16 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 export const initApp = async () => {
   const authStore = useAuthStore()
+  
+  try {
+    await authStore.initAuth()
+    console.log('Auth initialized successfully')
+  } catch (error) {
+    console.error('Failed to initialize auth:', error)
+  }
 
-  await authStore.initAuth()
-
-  dayjs.extend(duration);
-  dayjs.extend(relativeTime);
+  dayjs.extend(duration)
+  dayjs.extend(relativeTime)
+  
+  return authStore.isAuth
 }

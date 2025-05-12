@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
-import { initApp } from '@/bootstrap'
 import Toast from "vue-toastification";
 
 import '@assets/app.scss'
@@ -17,8 +16,7 @@ import vue3GoogleLogin from 'vue3-google-login'
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
-initApp().then(() => {
-  app.component('VueDatePicker', VueDatePicker);
+app.component('VueDatePicker', VueDatePicker);
   app.use(vue3GoogleLogin, {
     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   })
@@ -32,5 +30,4 @@ initApp().then(() => {
   })
   app.use(fullscreenImagePlugin)
   app.mount('#app')
-})
 

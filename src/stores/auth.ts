@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = resToken
 
     localStorage.setItem('token', resToken)
-    userStore.fetchUser().then()
+    userStore.fetchUser({trace: 'processToken'}).then()
     return true
   }
 
@@ -112,8 +112,8 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = localToken.value
       await userStore.fetchUser({
         ignoreAuth: true,
+        trace: 'initAuth'
       })
-
       if (userStore.user?._id) {
         isAuth.value = true
       } else {

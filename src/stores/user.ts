@@ -19,6 +19,7 @@ export const useUser = defineStore('user', () => {
 
   const fetchUser = async (opts?: {
     ignoreAuth?: boolean,
+    trace?: string,
   }) => {
     const resp = await http.request('/user', 'GET', {}, opts)
     if (resp.error) {

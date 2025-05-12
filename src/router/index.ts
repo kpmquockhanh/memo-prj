@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { initApp } from '@/bootstrap'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,7 +57,10 @@ const router = createRouter({
     {
       path: '/settings',
       name: 'settings',
-      component: () => import('../views/SettingsPage.vue')
+      component: () => import('../views/SettingsPage.vue'),
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/friends',
@@ -84,18 +88,33 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const { isAuth, setLastPath } = useAuthStore()
+let isInitialized = false
+
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // Ensure auth is initialized before proceeding
+  if (!isInitialized) {
+    try {
+      await initApp()
+      isInitialized = true
+    } catch (error) {
+      console.error('Failed to initialize app:', error)
+      next({ name: 'error' })
+      return
+    }
+  }
+
   let isBlock = false
   if (to.meta.requiresAuth) {
-    if (!isAuth) {
-      setLastPath(to.fullPath)
+    if (!authStore.isAuth) {
+      authStore.setLastPath(to.fullPath)
       next({ name: 'login' })
       isBlock = true
     }
   }
 
-  if (to.name === 'login' && isAuth) {
+  if (to.name === 'login' && authStore.isAuth) {
     next({ name: 'home' })
     isBlock = true
   }
