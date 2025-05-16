@@ -1,6 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { initApp } from '@/bootstrap'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+const initApp = async () => {
+  const authStore = useAuthStore()
+  
+  try {
+    await authStore.initAuth()
+    console.log('Auth initialized successfully')
+  } catch (error) {
+    console.error('Failed to initialize auth:', error)
+  }
+
+  dayjs.extend(duration)
+  dayjs.extend(relativeTime)
+  
+  return authStore.isAuth
+}
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

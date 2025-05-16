@@ -43,9 +43,9 @@ const onInvite = (userId: string) => {
 </script>
 
 <template>
-  <div class="w-full min-h-[calc(100vh-4rem)] bg-base-200 p-4">
+  <div class="w-full min-h-[calc(100vh-4rem)] p-4">
     <div class="max-w-3xl mx-auto">
-      <div class="card bg-base-100 shadow-xl">
+      <div class="card bg-base-100 shadow-md">
         <div class="card-body p-6">
           <!-- Header -->
           <div class="flex items-center justify-between mb-6">
@@ -178,24 +178,14 @@ const onInvite = (userId: string) => {
   @apply transition-all duration-300;
 }
 
-.card:hover {
-  @apply shadow-lg;
-}
 
 .input {
   @apply transition-all duration-300;
 }
 
-.input:focus {
-  @apply shadow-lg;
-}
 
 .btn {
   @apply transition-all duration-300;
-}
-
-.btn:hover {
-  @apply shadow-lg;
 }
 
 .btn:active {

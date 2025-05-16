@@ -81,12 +81,12 @@ onMounted(async () => {
 
 <template>
   <div v-if="isAuthenticated" class="w-full">
-    <div class="card bg-base-100 shadow-xl">
+    <div class="card bg-base-100 shadow-md">
       <div class="card-body p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="card-title text-base font-semibold">Friends</h2>
           <button 
-            class="btn btn-primary btn-sm gap-1 shadow-lg hover:shadow-primary/20"
+            class="btn btn-primary btn-sm gap-1 shadow-md hover:shadow-primary/20"
             @click="routeToFriendSearch"
           >
             <Icon size="16">
