@@ -48,6 +48,7 @@ export type User = {
   photoUrl: string,
   username: string,
   memoryDate: string,
+  isOnline: boolean,
 }
 
 export type UpdateUser = {
