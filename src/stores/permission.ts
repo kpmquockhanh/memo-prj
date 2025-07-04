@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Permissison, Role, RoleUpdateRequest } from '@/types/base'
+import type { Permission, Role, RoleUpdateRequest } from '@/types/base'
 import { get, uniq } from 'lodash'
 import { useRequest } from '@/stores/http'
 import { useToast } from 'vue-toastification'
@@ -8,7 +8,7 @@ import { useToast } from 'vue-toastification'
 export const usePermissionStore = defineStore('permission', () => {
   const toast = useToast()
   const items = ref<string[]>([])
-  const allItems = ref<{permissions: Permissison[]; roles: Role[]}>({
+  const allItems = ref<{permissions: Permission[]; roles: Role[]}>({
     permissions: [],
     roles: [],
   })
@@ -21,7 +21,7 @@ export const usePermissionStore = defineStore('permission', () => {
     isLoading.value = false
   }
 
-  const updatePermission = async (p: Permissison) => {
+  const updatePermission = async (p: Permission) => {
     const resp = await request.request(`/v1/permissions`, 'PUT', {
       body: p
     })
@@ -34,10 +34,10 @@ export const usePermissionStore = defineStore('permission', () => {
 
   const fetchOwnedPermissions = async () => {
     const resp = await request.request('/v1/permissions/owned', 'GET', {})
-    items.value = (get(resp, 'permissions', []) || []).map((p : Permissison) => p.name)
+    items.value = (get(resp, 'permissions', []) || []).map((p : Permission) => p.name)
   }
 
-  const allPermissions = computed<Permissison[]>(() => {
+  const allPermissions = computed<Permission[]>(() => {
     return uniq(Object.values(get(allItems.value, 'permissions', [])).flat())
   })
 

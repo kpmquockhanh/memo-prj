@@ -87,7 +87,7 @@ export type Invitation = {
   updatedAt: string,
 }
 
-export type Permissison = {
+export type Permission = {
   name: string,
   _id: string,
   id: string,
@@ -97,7 +97,7 @@ export type Role = {
   name: string,
   description: string,
   _id: string,
-  permissions: Permissison[],
+  permissions: Permission[],
 }
 
 export type RoleUpdateRequest = {

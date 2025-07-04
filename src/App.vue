@@ -36,7 +36,7 @@ onMounted(() => {
     <router-view v-slot="{ Component }">
       <div class="wrapper flex-grow flex px-2 pb-2">
         <transition name="fade" mode="out-in">
-          <Component :is="Component" />
+          <Component style="transition-duration: 200ms;" :is="Component" />
         </transition>
       </div>
     </router-view>

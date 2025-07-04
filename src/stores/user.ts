@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Permissison, ResponseUpdateUser, Role, UpdateUser, User } from '@/types/base'
+import type { Permission, ResponseUpdateUser, Role, UpdateUser, User } from '@/types/base'
 import { useRequest } from '@/stores/http'
 import get from 'lodash/get'
 
@@ -52,8 +52,8 @@ export const useUser = defineStore('user', () => {
   }
 
   const permissions = computed(() => {
-    const rolePermissions = (get(user.value, 'roles', []) || []).map((r: Role) => r.permissions).flat().map((p: Permissison) => p.name)
-    const permissions = (get(user.value, 'permissions', []) || []).map((p: Permissison) => p.name)
+    const rolePermissions = (get(user.value, 'roles', []) || []).map((r: Role) => r.permissions).flat().map((p: Permission) => p.name)
+    const permissions = (get(user.value, 'permissions', []) || []).map((p: Permission) => p.name)
     return [...rolePermissions, ...permissions]
   })
 
