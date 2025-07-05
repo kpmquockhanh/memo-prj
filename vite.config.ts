@@ -11,17 +11,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            // Group major libs separately
-            if (id.includes('vue')) return 'vendor-vue'
-            if (id.includes('lodash')) return 'vendor-lodash'
-            if (id.includes('dayjs')) return 'vendor-dayjs'
-            if (id.includes('vue-toastification')) return 'vendor-vue-toastification'
-            if (id.includes('vue3-google-login')) return 'vendor-vue3-google-login'
-            if (id.includes('vue3-lazyload')) return 'vendor-vue3-lazyload'
-            if (id.includes('vue3-dropzone')) return 'vendor-vue3-dropzone'
-            return 'vendor'
-          }
+          if (id.includes('lodash')) return 'vendor-lodash'
+          if (id.includes('dayjs')) return 'vendor-dayjs'
+          if (id.includes('vue-toastification')) return 'vendor-vue-toastification'
+          if (id.includes('vue3-google-login')) return 'vendor-vue3-google-login'
+          if (id.includes('vue3-lazyload')) return 'vendor-vue3-lazyload'
+          if (id.includes('vue3-dropzone')) return 'vendor-vue3-dropzone'
         }
       }
     }
