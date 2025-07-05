@@ -122,6 +122,7 @@ onMounted(() => {
             type="password"
             class="grow"
             value="password"
+            placeholder="Password"
             v-model="password"
             @keyup.enter="onLogin"
             :disabled="loading"

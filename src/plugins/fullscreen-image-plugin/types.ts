@@ -11,6 +11,15 @@ export interface FullscreenImageProps {
   maxHeight?: string;
   maxWidth?: string;
   backdropColor?: string;
-  description?: string;
+  details?: {
+    description?: string;
+    itemId?: string;
+    createdAt?: string;
+    createdBy?: {
+      name?: string;
+      photoUrl?: string;
+    };
+    public?: boolean;
+  }
 }
 

@@ -4,6 +4,20 @@ export type AuthRequest = {
   password: string
 }
 
+export type Pagination = {
+  page: number,
+  limit: number,
+  total: number
+}
+
+export type Comment = {
+  _id: string,
+  uuid: string,
+  comment: string,
+  user: User,
+  created_at: string,
+  can_delete?: boolean,
+}
 export type AuthResponse = {
   accessToken: string,
   user: User,

@@ -140,10 +140,14 @@ const confirmToggleVisibility = async () => {
               :clickable="true"
               :loading-height="item.height * ratio"
               :loading-width="item.width * ratio"
+              :item-id="item._id"
+              :created-at="item.createdAt"
+              :created-by="item.createdBy"
+              :public="item.public"
             />
 
             <div
-              class="absolute top-1 left-1 w-5 h-5 avatar-image ring rounded-full ring-2"
+              class="absolute top-1 left-1 w-5 h-5 avatar-image overflow-hidden ring rounded-full ring-2"
               :class="{ 'ring-green-500': item.public, 'ring-blue-500': !item.public }"
             >
               <DynamicImage
@@ -156,24 +160,33 @@ const confirmToggleVisibility = async () => {
               </Icon>
             </div>
             <div class="dropdown dropdown-end absolute top-1 right-1">
-              <label tabindex="0" class="btn btn-xs btn-circle btn-ghost bg-gray-700/50 hover:bg-gray-700">
+              <label
+                tabindex="0"
+                class="btn btn-xs btn-circle btn-ghost bg-gray-700/50 hover:bg-gray-700"
+              >
                 <Icon size="16">
                   <MoreVertical />
                 </Icon>
               </label>
-              <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
+              <ul
+                tabindex="0"
+                class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52"
+              >
                 <li v-if="item.can_delete">
                   <a @click="onClickRemove(item)" class="text-xs text-red-500 hover:bg-red-500/10">
                     <span>Delete</span>
                   </a>
                 </li>
                 <li>
-                  <a 
-                    @click="onToggleVisibility(item)" 
+                  <a
+                    @click="onToggleVisibility(item)"
                     class="text-xs text-blue-500 hover:bg-blue-500/10"
                     :class="{ 'opacity-50 cursor-not-allowed': updatingVisibility === item._id }"
                   >
-                    <span v-if="updatingVisibility === item._id" class="loading loading-spinner loading-xs"></span>
+                    <span
+                      v-if="updatingVisibility === item._id"
+                      class="loading loading-spinner loading-xs"
+                    ></span>
                     <span v-else>{{ item.public ? 'Make Private' : 'Make Public' }}</span>
                   </a>
                 </li>
@@ -191,7 +204,9 @@ const confirmToggleVisibility = async () => {
     </template>
 
     <div class="fixed right-4 bottom-4 z-40">
-      <div class="menu-container bg-base-100 rounded-2xl shadow-lg border border-base-300/50 backdrop-blur-sm">
+      <div
+        class="menu-container bg-base-100 rounded-2xl shadow-lg border border-base-300/50 backdrop-blur-sm"
+      >
         <ul class="menu menu-horizontal p-2 gap-1">
           <li>
             <a class="tooltip tooltip-left menu-item" data-tip="Home">
@@ -213,11 +228,7 @@ const confirmToggleVisibility = async () => {
           </li>
           <template v-if="auth.isAuth">
             <li>
-              <a 
-                class="tooltip tooltip-left menu-item" 
-                data-tip="Upload" 
-                @click.prevent="onShow"
-              >
+              <a class="tooltip tooltip-left menu-item" data-tip="Upload" @click.prevent="onShow">
                 <Icon size="20">
                   <Add />
                 </Icon>
@@ -290,7 +301,7 @@ const confirmToggleVisibility = async () => {
       :ok-class="updatingItem?.public ? 'btn-warning' : 'btn-success'"
     >
       <div class="flex flex-col items-center py-6">
-        <div 
+        <div
           class="w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors duration-300"
           :class="updatingItem?.public ? 'bg-warning/10' : 'bg-success/10'"
         >
@@ -300,9 +311,11 @@ const confirmToggleVisibility = async () => {
           </Icon>
         </div>
         <p class="text-base-content/80 text-center mb-6 max-w-sm">
-          {{ updatingItem?.public 
-            ? 'This image will only be visible to you. Others won\'t be able to see it anymore.'
-            : 'This image will be visible to everyone. Others will be able to see it.' }}
+          {{
+            updatingItem?.public
+              ? "This image will only be visible to you. Others won't be able to see it anymore."
+              : 'This image will be visible to everyone. Others will be able to see it.'
+          }}
         </p>
         <DynamicImage
           v-if="updatingItem"
@@ -319,7 +332,9 @@ const confirmToggleVisibility = async () => {
           <Icon size="16" class="text-base-content/50">
             <InfoCircleOutline />
           </Icon>
-          <span class="text-base-content/70">{{ updatingItem?.public ? 'Current: Public' : 'Current: Private' }}</span>
+          <span class="text-base-content/70">{{
+            updatingItem?.public ? 'Current: Public' : 'Current: Private'
+          }}</span>
         </div>
       </div>
     </BaseModal>
