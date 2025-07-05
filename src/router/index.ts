@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { defineAsyncComponent } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -27,12 +28,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomePage.vue')
+      component: defineAsyncComponent(() => import('../views/HomePage.vue'))
     },
     {
       path: '/chat',
       name: 'chat-list',
-      component: () => import('../views/RoomList.vue'),
+      component: defineAsyncComponent(() => import('../views/RoomList.vue')),
       meta: {
         requiresAuth: true
       }
@@ -40,7 +41,7 @@ const router = createRouter({
     {
       path: '/chat/:room_id',
       name: 'chat',
-      component: () => import('../views/ChatBoard.vue'),
+      component: defineAsyncComponent(() => import('../views/ChatBoard.vue')),
       meta: {
         requiresAuth: true
       }
@@ -48,7 +49,7 @@ const router = createRouter({
     {
       path: '/chat/edit/:room_id',
       name: 'chat:edit',
-      component: () => import('../views/EditRoomPage.vue'),
+      component: defineAsyncComponent(() => import('../views/EditRoomPage.vue')),
       meta: {
         requiresAuth: true
       }
@@ -56,27 +57,27 @@ const router = createRouter({
     {
       path: '/random',
       name: 'randomPage',
-      component: () => import('../views/RandomPage.vue')
+      component: defineAsyncComponent(() => import('../views/RandomPage.vue'))
     },
     {
       path: '/questions',
       name: 'questionPage',
-      component: () => import('../views/QuestionPage.vue')
+      component: defineAsyncComponent(() => import('../views/QuestionPage.vue'))
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginPage.vue')
+      component: defineAsyncComponent(() => import('../views/LoginPage.vue'))
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/RegisterPage.vue')
+      component: defineAsyncComponent(() => import('../views/RegisterPage.vue'))
     },
     {
       path: '/settings',
       name: 'settings',
-      component: () => import('../views/SettingsPage.vue'),
+      component: defineAsyncComponent(() => import('../views/SettingsPage.vue')),
       meta: {
         requiresAuth: true
       }
@@ -84,25 +85,25 @@ const router = createRouter({
     {
       path: '/friends',
       name: 'friends',
-      component: () => import('../views/FindFriendPage.vue')
+      component: defineAsyncComponent(() => import('../views/FindFriendPage.vue'))
     },
     {
       path: '/ai-number',
       name: 'ai_number',
-      component: () => import('../views/NumberPredictionPage.vue')
+      component: defineAsyncComponent(() => import('../views/NumberPredictionPage.vue'))
     },
     {
       path: '/test',
       name: 'test',
-      component: () => import('../views/TestPage.vue')
+      component: defineAsyncComponent(() => import('../views/TestPage.vue'))  
     },
     {
       path: '/error',
-      component: () => import('../views/SomethingWrongPage.vue')
+      component: defineAsyncComponent(() => import('../views/SomethingWrongPage.vue'))
     },
     {
       path: '/:pathMatch(.*)*',
-      component: () => import('../views/NotFoundPage.vue')
+      component: defineAsyncComponent(() => import('../views/NotFoundPage.vue'))
     }
   ]
 })

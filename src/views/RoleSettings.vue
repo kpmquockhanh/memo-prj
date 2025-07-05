@@ -148,7 +148,7 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { usePermissionStore } from '@/stores/permission'
 import SCheckbox from './SCheckbox.vue'
-import { uniq } from 'lodash'
+import uniq from 'lodash/uniq'
 import { useFriendStore } from '@/stores/friend'
 import { useUser } from '@/stores/user'
 import DynamicImage from '@components/DynamicImage.vue'

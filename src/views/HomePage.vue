@@ -7,7 +7,7 @@ import { useAttachment } from '@/stores/attachment'
 import DynamicImage from '@components/DynamicImage.vue'
 import type { Attachment } from '@/types/base'
 import { useAuthStore } from '@/stores/auth'
-// import CountdownComponent from '@/views/CountdownComponent.vue'
+import CountdownComponent from '@/views/CountdownComponent.vue'
 import DropzoneComponent from '@components/DropzoneComponent.vue'
 import WelcomeApp from '@/views/WelcomeApp.vue'
 import { storeToRefs } from 'pinia'
@@ -21,6 +21,7 @@ import InfoCircleOutline from '@vicons/ionicons5/InformationCircleOutline'
 import TrashOutline from '@vicons/ionicons5/TrashOutline'
 import LockClosedOutline from '@vicons/ionicons5/LockClosedOutline'
 import GlobeOutline from '@vicons/ionicons5/GlobeOutline'
+import { useUser } from '@/stores/user'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore)
@@ -38,6 +39,7 @@ const updatingItem: Ref<Attachment | null> = ref(null)
 const dropzoneRef = ref<HTMLElement | null>(null)
 const masonryRef = ref<HTMLElement | null>(null)
 const router = useRouter()
+const userStore = useUser()
 
 onMounted(async () => {
   await doFetch()
@@ -116,9 +118,9 @@ const confirmToggleVisibility = async () => {
 </script>
 <template>
   <div class="w-full">
-    <!-- <div v-if="userStore.user?.memoryDate" class="flex justify-center mb-2">
+    <div v-if="userStore.user?.memoryDate" class="flex justify-center mb-2">
       <CountdownComponent :date="new Date(userStore.user?.memoryDate)" />
-    </div> -->
+    </div>
 
     <div v-if="true" class="flex justify-center mb-2">
       <FriendsComponent />

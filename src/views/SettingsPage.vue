@@ -10,6 +10,8 @@ import dayjs from 'dayjs'
 import RoleSettings from './RoleSettings.vue'
 import RemoveDuplicates from '@/views/RemoveDuplicates.vue'
 import { useRoute, useRouter } from 'vue-router'
+// import VueDatePicker from '@vuepic/vue-datepicker';
+// import '@vuepic/vue-datepicker/dist/main.css'
 
 const preview = usePreviewImage()
 const user = useUser()
@@ -204,13 +206,13 @@ const changeTab = (tab: string) => {
                       <span class="label-text font-medium">Start Date</span>
                       <span class="label-text-alt font-semibold">{{ dayjs(date).format('DD/MM/YYYY') }}</span>
                     </label>
-                    <VueDatePicker 
+                    <!-- <VueDatePicker 
                       v-model="date" 
                       inline 
                       auto-apply 
                       :enable-time-picker="false" 
                       :max-date="new Date()" 
-                    />
+                    /> -->
                   </div>
                 </div>
                 <div class="flex-grow flex items-center justify-center">

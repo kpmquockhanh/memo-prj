@@ -1,7 +1,8 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Permission, Role, RoleUpdateRequest } from '@/types/base'
-import { get, uniq } from 'lodash'
+import get from 'lodash/get'
+import uniq from 'lodash/uniq'
 import { useRequest } from '@/stores/http'
 import { useToast } from 'vue-toastification'
 

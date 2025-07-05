@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useRequest } from '@/stores/http'
-import { get } from 'lodash'
+import get from 'lodash/get'
 import type { Invitation, User } from '@/types/base'
 
 export const useFriendStore = defineStore('friend', () => {
