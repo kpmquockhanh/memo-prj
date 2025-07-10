@@ -11,7 +11,7 @@ export const useAttachment = defineStore('attachment', () => {
   const request = useRequest()
   const toast = useToast()
   const page = ref(1)
-  const limit = ref(50)
+  const limit = ref(10)
   const authStore = useAuthStore()
 
   const isLoading = ref(false)
@@ -142,20 +142,20 @@ export const useAttachment = defineStore('attachment', () => {
     })
   }
 
-  return { 
-    items, 
-    page, 
-    doFetch, 
-    getSrc, 
-    doUpload, 
+  return {
+    items,
+    page,
+    doFetch,
+    getSrc,
+    doUpload,
     doRemove,
     toggleVisibility,
-    nextPage, 
-    isLastPage, 
-    isLoading, 
-    reset, 
-    fetchUnusedAttachments, 
-    deleteUnusedAttachment, 
+    nextPage,
+    isLastPage,
+    isLoading,
+    reset,
+    fetchUnusedAttachments,
+    deleteUnusedAttachment,
     unusedItems,
   }
 })

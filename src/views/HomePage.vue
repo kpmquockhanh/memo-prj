@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref, computed } from 'vue'
+import { watch, nextTick, onMounted, ref, type Ref, computed } from 'vue'
 import Add from '@vicons/fluent/Add16Filled'
 import Camera from '@vicons/fluent/Camera20Filled'
 import { Icon } from '@vicons/utils'
@@ -22,6 +22,7 @@ import TrashOutline from '@vicons/ionicons5/TrashOutline'
 import LockClosedOutline from '@vicons/ionicons5/LockClosedOutline'
 import GlobeOutline from '@vicons/ionicons5/GlobeOutline'
 import { useUser } from '@/stores/user'
+import Masonry from 'masonry-layout'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore)
@@ -40,9 +41,30 @@ const dropzoneRef = ref<HTMLElement | null>(null)
 const masonryRef = ref<HTMLElement | null>(null)
 const router = useRouter()
 const userStore = useUser()
+const m = ref(null)
+
+const initMasonry = () => {
+  m.value = new Masonry(masonryRef.value, {
+    // options
+    itemSelector: '.grid-item',
+    initLayout: false,
+    columnWidth: 300,
+    horizontalOrder: true,
+    gutter: 10,
+    isFitWidth: true
+  })
+  items.value = [...items.value]
+}
 
 onMounted(async () => {
   await doFetch()
+  nextTick(() => {
+    initMasonry()
+  })
+})
+watch(items, async () => {
+  if (!m.value) return
+  m.value.layout()
 })
 
 const onShow = () => {
@@ -76,29 +98,9 @@ const onLoadMore = async () => {
   isLoadingMore.value = true
   await nextPage()
   isLoadingMore.value = false
+  initMasonry()
+  m.value.layout()
 }
-
-const columnWidths = computed(() => {
-  const container = masonryRef.value
-  if (!container) {
-    return 0
-  }
-  const computedStyle = window.getComputedStyle(container)
-  const columnGap = parseInt(computedStyle.columnGap) || 0
-  const containerWidth = container.offsetWidth
-  const columnCount = parseInt(computedStyle.columnCount)
-
-  // Calculate the width of a single column
-  return (containerWidth - columnGap * (columnCount - 1)) / columnCount
-})
-
-const ratio = computed(() => {
-  if (!columnWidths.value) {
-    return 0
-  }
-
-  return columnWidths.value / 300
-})
 
 const onToggleVisibility = async (item: Attachment) => {
   if (updatingVisibility.value === item._id) return
@@ -127,75 +129,80 @@ const confirmToggleVisibility = async () => {
     </div>
     <WelcomeApp v-if="!items.length && !isLoading" @start="onShow" />
     <template v-if="items.length">
-      <div class="masonry sm:masonry-sm md:masonry-md lg:masonry-lg" ref="masonryRef">
-        <transition-group name="list">
-          <div
-            v-for="item in items"
-            :key="item._id"
-            class="break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow"
-          >
-            <DynamicImage
-              class="crd"
-              :src="item.fullPath"
-              :description="item.description || ''"
-              alt="egjs"
-              :clickable="true"
-              :loading-height="item.height * ratio"
-              :loading-width="item.width * ratio"
-              :item-id="item._id"
-              :created-at="item.createdAt"
-              :created-by="item.createdBy"
-              :public="item.public"
-            />
-
+      <div class="flex justify-center">
+        <div ref="masonryRef">
+          <transition-group name="list">
             <div
-              class="absolute top-1 left-1 w-5 h-5 avatar-image overflow-hidden ring rounded-full ring-2"
-              :class="{ 'ring-green-500': item.public, 'ring-blue-500': !item.public }"
+              v-for="item in items"
+              :key="item._id"
+              class="grid-item break-inside-avoid mb-2 relative hover:drop-shadow hover:shadow-base-300 transition-shadow"
             >
               <DynamicImage
-                circle
-                :src="item.createdBy?.photoUrl"
-                v-if="item.createdBy?.photoUrl"
+                class="crd"
+                :src="item.fullPath"
+                :description="item.description || ''"
+                alt="egjs"
+                :clickable="true"
+                :loading-height="item.height"
+                :loading-width="item.width"
+                :item-id="item._id"
+                :created-at="item.createdAt"
+                :created-by="item.createdBy"
+                :public="item.public"
               />
-              <Icon v-else size="20">
-                <UserIcon />
-              </Icon>
-            </div>
-            <div class="dropdown dropdown-end absolute top-1 right-1">
-              <label
-                tabindex="0"
-                class="btn btn-xs btn-circle btn-ghost bg-gray-700/50 hover:bg-gray-700"
+
+              <div
+                class="absolute top-1 left-1 w-5 h-5 avatar-image overflow-hidden ring rounded-full ring-2"
+                :class="{ 'ring-green-500': item.public, 'ring-blue-500': !item.public }"
               >
-                <Icon size="16">
-                  <MoreVertical />
+                <DynamicImage
+                  circle
+                  :src="item.createdBy?.photoUrl"
+                  v-if="item.createdBy?.photoUrl"
+                />
+                <Icon v-else size="20">
+                  <UserIcon />
                 </Icon>
-              </label>
-              <ul
-                tabindex="0"
-                class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52"
-              >
-                <li v-if="item.can_delete">
-                  <a @click="onClickRemove(item)" class="text-xs text-red-500 hover:bg-red-500/10">
-                    <span>Delete</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    @click="onToggleVisibility(item)"
-                    class="text-xs text-blue-500 hover:bg-blue-500/10"
-                    :class="{ 'opacity-50 cursor-not-allowed': updatingVisibility === item._id }"
-                  >
-                    <span
-                      v-if="updatingVisibility === item._id"
-                      class="loading loading-spinner loading-xs"
-                    ></span>
-                    <span v-else>{{ item.public ? 'Make Private' : 'Make Public' }}</span>
-                  </a>
-                </li>
-              </ul>
+              </div>
+              <div class="dropdown dropdown-end absolute top-1 right-1">
+                <label
+                  tabindex="0"
+                  class="btn btn-xs btn-circle btn-ghost bg-gray-700/50 hover:bg-gray-700"
+                >
+                  <Icon size="16">
+                    <MoreVertical />
+                  </Icon>
+                </label>
+                <ul
+                  tabindex="0"
+                  class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52"
+                >
+                  <li v-if="item.can_delete">
+                    <a
+                      @click="onClickRemove(item)"
+                      class="text-xs text-red-500 hover:bg-red-500/10"
+                    >
+                      <span>Delete</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      @click="onToggleVisibility(item)"
+                      class="text-xs text-blue-500 hover:bg-blue-500/10"
+                      :class="{ 'opacity-50 cursor-not-allowed': updatingVisibility === item._id }"
+                    >
+                      <span
+                        v-if="updatingVisibility === item._id"
+                        class="loading loading-spinner loading-xs"
+                      ></span>
+                      <span v-else>{{ item.public ? 'Make Private' : 'Make Public' }}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-        </transition-group>
+          </transition-group>
+        </div>
       </div>
       <div v-if="!isLastPage" class="flex justify-center mb-2 mt-2">
         <button class="btn btn-sm btn-outline" ref="loadMoreRef" @click="onLoadMore">
@@ -371,3 +378,4 @@ const confirmToggleVisibility = async () => {
 
 /* ... rest of existing styles ... */
 </style>
+
