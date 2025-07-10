@@ -39,6 +39,7 @@
     "@tsconfig/node20": "^20.1.2",
     "@types/dropzone": "^5.7.8",
     "@types/lodash": "^4.17.7",
+    "@types/masonry-layout": "^4.2.8",
     "@types/node": "^20.11.28",
     "@types/socket.io": "^3.0.2",
     "@types/socket.io-client": "^3.0.0",

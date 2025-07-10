@@ -41,9 +41,10 @@ const dropzoneRef = ref<HTMLElement | null>(null)
 const masonryRef = ref<HTMLElement | null>(null)
 const router = useRouter()
 const userStore = useUser()
-const m = ref(null)
+const m = ref<Masonry>()
 
 const initMasonry = () => {
+  if (!masonryRef.value) return
   m.value = new Masonry(masonryRef.value, {
     // options
     itemSelector: '.grid-item',
@@ -51,21 +52,23 @@ const initMasonry = () => {
     columnWidth: 300,
     horizontalOrder: true,
     gutter: 10,
-    isFitWidth: true
+    fitWidth: true
   })
   items.value = [...items.value]
 }
 
+const doMasonry = () => {
+  if (!m.value?.layout) return
+  m.value.layout()
+}
+
 onMounted(async () => {
   await doFetch()
-  nextTick(() => {
+  await nextTick(() => {
     initMasonry()
   })
 })
-watch(items, async () => {
-  if (!m.value) return
-  m.value.layout()
-})
+watch(items, doMasonry)
 
 const onShow = () => {
   if (auth.isAuth) {
@@ -99,7 +102,7 @@ const onLoadMore = async () => {
   await nextPage()
   isLoadingMore.value = false
   initMasonry()
-  m.value.layout()
+  doMasonry()
 }
 
 const onToggleVisibility = async (item: Attachment) => {
