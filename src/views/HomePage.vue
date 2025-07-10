@@ -42,6 +42,7 @@ const masonryRef = ref<HTMLElement | null>(null)
 const router = useRouter()
 const userStore = useUser()
 const m = ref<Masonry>()
+const loadMoreRef = ref<HTMLElement | null>(null)
 
 const initMasonry = () => {
   if (!masonryRef.value) return
@@ -66,6 +67,8 @@ onMounted(async () => {
   await doFetch()
   await nextTick(() => {
     initMasonry()
+    if (!loadMoreRef.value) return
+    observer.observe(loadMoreRef.value)
   })
 })
 watch(items, doMasonry)
@@ -92,7 +95,15 @@ const onClickRemove = (item: Attachment) => {
   isShowDeleteModal.value = true
 }
 
-const loadMoreRef = ref<HTMLElement | null>(null)
+const observer = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting) {
+      onLoadMore()
+    }
+  },
+  { rootMargin: '100px' }
+)
+
 
 const onLoadMore = async () => {
   if (isLoadingMore.value) {
