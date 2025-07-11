@@ -1,9 +1,11 @@
+@use "base";
+@use 'css/404' as notfound;
+@use 'css/dropzone';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "base";
-@import 'css/404';
-@import 'css/dropzone.css';
+
 
 @layer utilities {
   @variants responsive {
