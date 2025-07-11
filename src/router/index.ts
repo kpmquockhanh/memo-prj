@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { defineAsyncComponent } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -7,7 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 const initApp = async () => {
   const authStore = useAuthStore()
-  
+
   try {
     await authStore.initAuth()
     console.log('Auth initialized successfully')
@@ -17,7 +16,7 @@ const initApp = async () => {
 
   dayjs.extend(duration)
   dayjs.extend(relativeTime)
-  
+
   return authStore.isAuth
 }
 
@@ -28,12 +27,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: defineAsyncComponent(() => import('../views/HomePage.vue'))
+      component: () => import('../views/HomePage.vue')
     },
     {
       path: '/chat',
       name: 'chat-list',
-      component: defineAsyncComponent(() => import('../views/RoomList.vue')),
+      component: () => import('../views/RoomList.vue'),
       meta: {
         requiresAuth: true
       }
@@ -41,7 +40,7 @@ const router = createRouter({
     {
       path: '/chat/:room_id',
       name: 'chat',
-      component: defineAsyncComponent(() => import('../views/ChatBoard.vue')),
+      component: () => import('../views/ChatBoard.vue'),
       meta: {
         requiresAuth: true
       }
@@ -49,7 +48,7 @@ const router = createRouter({
     {
       path: '/chat/edit/:room_id',
       name: 'chat:edit',
-      component: defineAsyncComponent(() => import('../views/EditRoomPage.vue')),
+      component: () => import('../views/EditRoomPage.vue'),
       meta: {
         requiresAuth: true
       }
@@ -57,27 +56,27 @@ const router = createRouter({
     {
       path: '/random',
       name: 'randomPage',
-      component: defineAsyncComponent(() => import('../views/RandomPage.vue'))
+      component: () => import('../views/RandomPage.vue')
     },
     {
       path: '/questions',
       name: 'questionPage',
-      component: defineAsyncComponent(() => import('../views/QuestionPage.vue'))
+      component: () => import('../views/QuestionPage.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: defineAsyncComponent(() => import('../views/LoginPage.vue'))
+      component: () => import('../views/LoginPage.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: defineAsyncComponent(() => import('../views/RegisterPage.vue'))
+      component: () => import('../views/RegisterPage.vue')
     },
     {
       path: '/settings',
       name: 'settings',
-      component: defineAsyncComponent(() => import('../views/SettingsPage.vue')),
+      component: () => import('../views/SettingsPage.vue'),
       meta: {
         requiresAuth: true
       }
@@ -85,25 +84,25 @@ const router = createRouter({
     {
       path: '/friends',
       name: 'friends',
-      component: defineAsyncComponent(() => import('../views/FindFriendPage.vue'))
+      component: () => import('../views/FindFriendPage.vue')
     },
     {
       path: '/ai-number',
       name: 'ai_number',
-      component: defineAsyncComponent(() => import('../views/NumberPredictionPage.vue'))
+      component: () => import('../views/NumberPredictionPage.vue')
     },
     {
       path: '/test',
       name: 'test',
-      component: defineAsyncComponent(() => import('../views/TestPage.vue'))  
+      component: () => import('../views/TestPage.vue')
     },
     {
       path: '/error',
-      component: defineAsyncComponent(() => import('../views/SomethingWrongPage.vue'))
+      component: () => import('../views/SomethingWrongPage.vue')
     },
     {
       path: '/:pathMatch(.*)*',
-      component: defineAsyncComponent(() => import('../views/NotFoundPage.vue'))
+      component: () => import('../views/NotFoundPage.vue')
     }
   ]
 })
@@ -112,7 +111,7 @@ let isInitialized = false
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // Ensure auth is initialized before proceeding
   if (!isInitialized) {
     try {

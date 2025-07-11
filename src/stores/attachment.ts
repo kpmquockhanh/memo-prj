@@ -86,7 +86,7 @@ export const useAttachment = defineStore('attachment', () => {
       toast.error('Delete failed')
       return
     }
-    items.value = items.value.filter((item) => item._id !== id)
+    items.value = [...items.value.filter((item) => item._id !== id)]
   }
 
   const toggleVisibility = async (id: string, isPublic: boolean) => {
@@ -107,8 +107,11 @@ export const useAttachment = defineStore('attachment', () => {
     return true
   }
 
-  const getSrc = (attachment: Attachment) => {
-    return `${import.meta.env.VITE_API_DOMAIN}${attachment.src}`
+  const getSrc = (src: string, preview: boolean) => {
+    if (preview) {
+      return `${import.meta.env.VITE_CDN_PREVIEW_URL}/${src}`
+    }
+    return `${import.meta.env.VITE_CDN_URL}/${src}`
   }
 
   const reset = () => {

@@ -84,7 +84,7 @@ const lazyOptions = {
 
 const previewOptions = props.clickable
   ? {
-      imageUrl: path.value?.replace('preview/', ''),
+      imageUrl: path.value?.replace('-preview', ''),
       withDownload: false,
       animation: 'blur',
       details: {
