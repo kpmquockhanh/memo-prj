@@ -61,7 +61,6 @@ const doMasonry = () => {
   nextTick(() => {
     if (!m.value?.layout || !m.value?.reloadItems) return
     m.value?.reloadItems()
-    console.log('doooooo', m.value?.getItemElements())
     m.value.layout()
   })
 }

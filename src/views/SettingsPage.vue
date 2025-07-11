@@ -160,7 +160,7 @@ const changeTab = (tab: string) => {
                       <div v-if="!preview.previewImage" class="w-48 h-48 rounded-lg overflow-hidden">
                         <DynamicImage
                           :dummy="!user.user?.photoUrl"
-                          :src="getSrc(user.user?.photoUrl, true) || ''"
+                          :src="getSrc(user.user?.photoUrl || '', true) || ''"
                           :loading-height="300"
                           :loading-width="300"
                           alt="Profile"
