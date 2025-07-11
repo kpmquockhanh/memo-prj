@@ -10,6 +10,7 @@ import AddCircleOutline from '@vicons/ionicons5/AddCircleOutline'
 import CloseOutline from '@vicons/ionicons5/CloseOutline'
 import MailOutline from '@vicons/ionicons5/MailOutline'
 import CalendarOutline from '@vicons/ionicons5/CalendarOutline'
+import { getSrc } from '@/utils'
 
 // Types
 interface Friend {
@@ -151,7 +152,7 @@ onMounted(async () => {
                         <DynamicImage 
                           v-if="friend.photoUrl" 
                           circle 
-                          :src="friend.photoUrl"
+                          :src="getSrc(friend.photoUrl, true)"
                           class="w-full h-full object-cover"
                         />
                         <div v-else class="w-full h-full flex items-center justify-center bg-base-300">
@@ -203,7 +204,7 @@ onMounted(async () => {
                     <DynamicImage 
                       v-if="modalState.selectedFriend?.photoUrl" 
                       circle 
-                      :src="modalState.selectedFriend.photoUrl"
+                      :src="getSrc(modalState.selectedFriend.photoUrl, true)"
                       class="w-full h-full object-cover"
                     />
                     <div v-else class="w-full h-full flex items-center justify-center bg-base-300">

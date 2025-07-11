@@ -4,6 +4,7 @@ import SettingIcon from '@vicons/fluent/Settings32Regular'
 import { Icon } from '@vicons/utils'
 import { useRoom } from '@/stores/room'
 import { useToast } from 'vue-toastification'
+import { getSrc } from '@/utils'
 
 const room = useRoom()
 const toast = useToast()
@@ -141,7 +142,7 @@ onMounted(async () => {
           <figure class="relative group">
             <img 
               v-if="r.thumbnail" 
-              :src="r.thumbnail" 
+              :src="getSrc(r.thumbnail)"
               :alt="r.name"
               class="w-full h-48 object-cover"
             >

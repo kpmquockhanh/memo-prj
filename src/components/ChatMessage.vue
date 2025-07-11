@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import dayjs from 'dayjs'
 import UserIcon from '@vicons/ionicons5/PersonSharp'
 import DynamicImage from '@components/DynamicImage.vue'
+import { getSrc } from '@/utils'
 
 const props = defineProps({
   side: {
@@ -35,7 +36,7 @@ const timeData = computed(() => {
   <div :class="['chat', sideClass]">
     <div class="chat-image avatar">
       <div class="w-10 rounded-full ring ring-info ring-offset-base-100 ring-offset-1">
-        <DynamicImage v-if="props.message.user.photo?.photoUrl" :src="props.message.user.photo?.photoUrl" alt="User avatar"/>
+        <DynamicImage :lazy="false" v-if="props.message.user.photo?.photoUrl" :src="getSrc(props.message.user.photo?.photoUrl, true)" alt="User avatar"/>
         <UserIcon v-else/>
       </div>
     </div>

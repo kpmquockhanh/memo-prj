@@ -10,6 +10,8 @@ import dayjs from 'dayjs'
 import RoleSettings from './RoleSettings.vue'
 import RemoveDuplicates from '@/views/RemoveDuplicates.vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAttachment } from '@/stores/attachment'
+import { getSrc } from '@/utils'
 // import VueDatePicker from '@vuepic/vue-datepicker';
 // import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -158,8 +160,9 @@ const changeTab = (tab: string) => {
                       <div v-if="!preview.previewImage" class="w-48 h-48 rounded-lg overflow-hidden">
                         <DynamicImage
                           :dummy="!user.user?.photoUrl"
-                          :src="user.user?.photoUrl || ''"
-                          :loading-height="48"
+                          :src="getSrc(user.user?.photoUrl, true) || ''"
+                          :loading-height="300"
+                          :loading-width="300"
                           alt="Profile"
                           class="w-full h-full object-cover"
                         />

@@ -23,10 +23,11 @@ import LockClosedOutline from '@vicons/ionicons5/LockClosedOutline'
 import GlobeOutline from '@vicons/ionicons5/GlobeOutline'
 import { useUser } from '@/stores/user'
 import Masonry from 'masonry-layout'
+import { getSrc } from '@/utils'
 
 const attachmentStore = useAttachment()
 const { items, isLastPage, isLoading } = storeToRefs(attachmentStore)
-const { doFetch, doRemove, nextPage, toggleVisibility, getSrc } = attachmentStore
+const { doFetch, doRemove, nextPage, toggleVisibility } = attachmentStore
 const deleting = ref(false)
 const deletingItem: Ref<Attachment | null> = ref(null)
 const isLoadingMore = ref(false)
@@ -344,7 +345,7 @@ const confirmToggleVisibility = async () => {
         <DynamicImage
           v-if="updatingItem"
           class="rounded-xl transition-all duration-300 max-w-md w-full"
-          :src="updatingItem.fullPath"
+          :src="getSrc(updatingItem.src, true)"
           :dummy="false"
           :loading-height="updatingItem.height"
           :loading-width="updatingItem.width"

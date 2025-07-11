@@ -13,6 +13,7 @@ import Settings24Filled from '@vicons/fluent/Settings24Filled'
 import LogOutOutlined from '@vicons/ionicons5/LogOutOutline'
 import LogInOutlined from '@vicons/ionicons5/LogInOutline'
 import Key24Filled from '@vicons/fluent/Key24Filled'
+import { getSrc } from '@/utils'
 
 const menu = ref([
   {
@@ -244,7 +245,7 @@ const onFocusOut = (name: string) => {
             <UserIcon v-if="!user.user?.photoUrl" />
             <DynamicImage
               v-else
-              :src="user.user?.photoUrl"
+              :src="getSrc(user.user?.photoUrl, true)"
               alt="profile"
               :loading-height="40"
               :loading-width="40"

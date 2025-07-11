@@ -107,12 +107,6 @@ export const useAttachment = defineStore('attachment', () => {
     return true
   }
 
-  const getSrc = (src: string, preview: boolean) => {
-    if (preview) {
-      return `${import.meta.env.VITE_CDN_PREVIEW_URL}/${src}`
-    }
-    return `${import.meta.env.VITE_CDN_URL}/${src}`
-  }
 
   const reset = () => {
     items.value = []
@@ -149,7 +143,6 @@ export const useAttachment = defineStore('attachment', () => {
     items,
     page,
     doFetch,
-    getSrc,
     doUpload,
     doRemove,
     toggleVisibility,
